@@ -5,9 +5,9 @@
 	Updated: 2017/09/12
 -->
 {% if template and template != 'cart' %}
-	<script>
+	<script type="lazyload2">
 		// Subscriptions Powered by ReCharge Payments: JavaScript
-		(function() {
+		setTimeout(function() {
 			// Basic function to load script files, will be used to include jQuery
 			var loadScript = function(url, callback) {
 				var script = document.createElement("script");
@@ -78,7 +78,7 @@
 			} else {
 				reChargeThemeFooterJS(jQuery);
 			}
-		})();
+		});
 	</script>
 {% endif %}
 <!-- Subscriptions Powered by ReCharge Payments: End Liquid Code -->

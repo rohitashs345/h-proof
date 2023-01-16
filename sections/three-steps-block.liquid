@@ -48,22 +48,22 @@
 <div class="three-block-mobile__icon">
   <label class="three-block-mobile__item">
     <span class="three-block-mobile__picture">
-      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_1 | img_url: '80x'}}"  loading="lazy" alt="">
-      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_1_1 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_1 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_1_1 | img_url: '80x'}}"  loading="lazy" alt="">
     </span>
     <span class="three-block-mobile__title"> CHEERS </span>
   </label>
   <label class="three-block-mobile__item">
     <span class="three-block-mobile__picture">
-      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_2 | img_url: '80x'}}"  loading="lazy" alt="">
-      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_2_2 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_2 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_2_2 | img_url: '80x'}}"  loading="lazy" alt="">
     </span>
     <span class="three-block-mobile__title"> Chew </span>
   </label>
   <label class="three-block-mobile__item">
     <span class="three-block-mobile__picture">
-      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_3 | img_url: '80x'}}"  loading="lazy" alt="">
-      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_3_3 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_3 | img_url: '80x'}}"  loading="lazy" alt="">
+      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_3_3 | img_url: '80x'}}"  loading="lazy" alt="">
     </span>
     <span class="three-block-mobile__title"> SLEEP </span>
   </label>
@@ -93,11 +93,11 @@
           {% for block in section.blocks %}
             <div class="three-block-item col one-third text-align-center{% if forloop.first %} active{% endif %} block-{{ forloop.index }}">
               <div class="image-block">
-                <img class="step-banner" src="{{ block.settings.image | img_url: '600x' }}"  loading="lazy" alt="">
+                <img class="step-banner lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.image | img_url: '600x' }}"  loading="lazy" alt="">
                 {% if block.settings.icon != blank %}
-                  <img class="step-icon" src="{{ block.settings.icon | img_url: '200x' }}"  loading="lazy" alt="">
+                  <img class="step-icon lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.icon | img_url: '200x' }}"  loading="lazy" alt="">
                 {% else %}
-                  <img class="step-icon" src="{{ block.settings.icon_svg }}"  loading="lazy" alt="">
+                  <img class="step-icon lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.icon_svg }}"  loading="lazy" alt="">
                 {% endif %}
               </div>
               <div class="text-block">
@@ -109,22 +109,22 @@
                 <div class="three-block-mobile__icon">
                   <label class="three-block-mobile__item{% if forloop.index == 1 %} active{% endif %}" data-id="block-1">
                     <span class="three-block-mobile__picture">
-                      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_1 | img_url: '80x'}}"  loading="lazy" alt="">
-                      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_1_1 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_1 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_1_1 | img_url: '80x'}}"  loading="lazy" alt="">
                     </span>
                     <span class="three-block-mobile__title"> CHEERS </span>
                   </label>
                   <label class="three-block-mobile__item{% if forloop.index == 2 %} active{% endif %}" data-id="block-2">
                     <span class="three-block-mobile__picture">
-                      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_2 | img_url: '80x'}}"  loading="lazy" alt="">
-                      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_2_2 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_2 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_2_2 | img_url: '80x'}}"  loading="lazy" alt="">
                     </span>
                     <span class="three-block-mobile__title"> Chew </span>
                   </label>
                   <label class="three-block-mobile__item{% if forloop.index == 3 %} active{% endif %}" data-id="block-3">
                     <span class="three-block-mobile__picture">
-                      <img class="icon-mobile icon-not-select" src="{{ section.settings.icon_3 | img_url: '80x'}}"  loading="lazy" alt="">
-                      <img class="icon-mobile icon-seleted" src="{{ section.settings.icon_3_3 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-not-select lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_3 | img_url: '80x'}}"  loading="lazy" alt="">
+                      <img class="icon-mobile icon-seleted lazy2" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ section.settings.icon_3_3 | img_url: '80x'}}"  loading="lazy" alt="">
                     </span>
                     <span class="three-block-mobile__title"> SLEEP </span>
                   </label>

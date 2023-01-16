@@ -84,12 +84,13 @@ calculate_aspect_ratio: <boolean>
 {% if back_to_basics %}
   <div class="image-element__wrap"
               style="{{ image_background_color }}{{ height_style }}">
-      <img  alt="{{ alt | escape }}" src="{{ image | img_url: '2000x' }}"
+      <img  alt="{{ alt | escape }}" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+            data-src="{{ image | img_url: '2000x' }}"
             {% if inline_style %}
               style="{{ inline_style }}"
             {% endif %}
             {% if additional_classes %}
-              class="{{ additional_classes }}"
+              class="{{ additional_classes }} lazy2 lazy3"
             {% endif %}
       />
   </div>
@@ -101,17 +102,14 @@ calculate_aspect_ratio: <boolean>
             {% endif %}
             style="{{ image_background_color }}{{ height_style }} {% unless stretch_width == true or object_fit %}max-width: {{ image.width }}px;{% endunless %}">
   <img  alt="{{ alt | escape }}"
-        class="lazyload transition--{{ settings.image_loading_style }} {{ additional_classes }}"
-        {% if low_quality_image %}
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        {% endif %}
+        class="lazyloaded lazy2 lazy3 {{ additional_classes }}"
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
         data-src="{{ image | img_url: '1600x' }}"
         data-sizes="auto"
         data-srcset="{{ srcset }}"
         data-aspectratio="{{ image.width }}/{{ image.height }}"
         height="{{ image.height }}"
         width="{{ image.width }}"
-        srcset="data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'%20width='{{ image.width }}'%20height='{{ image.height }}'></svg>"
         style="{{ inline_style }};{{ height_style }}"
   />
 </div>

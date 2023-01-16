@@ -95,7 +95,7 @@
 
     {% if section.settings.image != blank %}
       <div class="popup__image {% if section.settings.image_cropping != 'none' %}has-image-crop image-crop--{{ section.settings.image_cropping }}{% endif %}">
-        {% render 'image-element',
+        {% render 'image-element-2',
                 image: section.settings.image,
                 alt: section.settings.image.alt,
                 stretch_width: true

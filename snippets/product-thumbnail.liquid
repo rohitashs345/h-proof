@@ -95,7 +95,7 @@
 
             {% comment %} Primary image {% endcomment %}
             {%
-              render 'image-element',
+              render 'image-element-3',
               image: product.featured_media.preview_image,
               alt: alt_text,
               object_fit: align_height,
@@ -116,7 +116,7 @@
                 </div>
               {% else %}
                 {%
-                  render 'image-element',
+                  render 'image-element-2',
                   image: product.media[1],
                   alt: alt_text,
                   object_fit: align_height,

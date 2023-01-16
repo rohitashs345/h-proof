@@ -1,0 +1,10 @@
+{%- assign base_font_bolder = settings.regular__font | font_modify: 'weight', 'bolder' -%}
+
+<link rel="preload" href="{{ settings.regular__font | font_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ settings.button__font | font_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ base_font_bolder | font_url }}" as="font" type="font/woff2" crossorigin>
+<style>
+  {{ settings.regular__font | font_face: font_display: 'swap' }}
+  {{ settings.button__font | font_face: font_display: 'swap' }}
+  {{ base_font_bolder | font_face: font_display: 'swap' }}
+</style>

@@ -107,7 +107,8 @@ enable_product_lightbox: <boolean>
 
               <div class="image__container" style="max-width: {{ media.width }}px">
                 <img id="{{ media.id }}"
-                class="lazyload lazyload--fade-in"
+                class="lazyloaded lazy2 {% if forloop.first == true %} lazy3 {% endif %}"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
                 alt="{{ media.alt | escape }}"
                 data-zoom-src="{{ image_5000x }}"
                 data-image-id="{{ product.media[forloop.index0].id }}"
@@ -123,7 +124,6 @@ enable_product_lightbox: <boolean>
                 data-aspectratio="{{ media.width }}/{{ media.height }}"
                 height="{{ media.height }}"
                 width="{{ media.width }}"
-                srcset="data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'%20width='{{ media.width }}'%20height='{{ media.height }}'></svg>"
                 >
               </div>
 
@@ -185,7 +185,7 @@ enable_product_lightbox: <boolean>
 
           <div class="product-gallery__thumbnail one-fifth column is-relative"
                 data-title="{{ media.alt | escape }}" tabindex="0">
-            <img src="{{ media | img_url: '300x' }}" alt="">
+            <img src="{{ media | img_url: '180x' }}" alt="">
             {% if thumbnail_badge != blank %}
               {% render 'icon',
                       name: thumbnail_badge,

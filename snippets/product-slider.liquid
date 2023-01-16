@@ -78,7 +78,7 @@ product_recommendations: <boolean>
 
                 {% comment %} Primary image {% endcomment %}
                 {%
-                  render 'image-element',
+                  render 'image-element-3',
                   image: product.featured_media.preview_image,
                   alt: alt_text,
                   object_fit: align_height,
@@ -88,7 +88,7 @@ product_recommendations: <boolean>
                 {% comment %} Secondary image {% endcomment %}
                 {% if product.media[1] != blank and settings.show_secondary_image == true %}
                   {%
-                    render 'image-element',
+                    render 'image-element-2',
                     image: product.media[1],
                     alt: alt_text,
                     object_fit: align_height,

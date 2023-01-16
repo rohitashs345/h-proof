@@ -22,7 +22,7 @@
 {% assign text_alpha = section.settings.text_color | color_extract: 'alpha' %}
 {% for block in section.blocks %}
 
-{% style %}
+<style type="lazyload2">
   .icon-text-{{block.id}}:before {
     {% if block.settings.show_svg_icon %}
     content: '';
@@ -65,7 +65,7 @@
    }
 }
 
-{% endstyle %}
+</style>
 
 {% endfor %}
 
@@ -117,7 +117,7 @@
             {% endif %}
                <div class="is-hidden-mobile-only">
               {% if block.settings.image != blank %}
-                {% render 'image-element',
+                {% render 'image-element-3',
                         image: block.settings.image,
                         alt: block.settings.image.alt,
                         stretch_width: false,
@@ -133,7 +133,7 @@
                 
                <div class="is-hidden-desktop-only">
               {% if block.settings.image_phone != blank %}
-                {% render 'image-element',
+                {% render 'image-element-3',
                         image: block.settings.image_phone,
                         alt: block.settings.image.alt,
                         stretch_width: false,
@@ -229,8 +229,8 @@
         {% for block in section.blocks %}                                                        
             <div class="icon-slideshow__content text-align-{{ text_alignment }}">
              {% if block.settings.icon_active %} 
-              <img src="{{ block.settings.icon_active | img_url: 'master'}}"  class="active-icon"  >
-              <img src="{{ block.settings.icon_inactive | img_url: 'master'}}"  class="inactive-icon"  >
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.icon_active | img_url: 'master'}}"  class="active-icon lazy2"  >
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.icon_inactive | img_url: 'master'}}"  class="inactive-icon lazy2"  >
               <h6 class="icon-text" >{{ block.settings.title }}</h6>
              {% endif %} 
             </div>

@@ -127,7 +127,7 @@
       {% endif %}
 
       {% if image != blank %}
-        {% render 'image-element',
+        {% render 'image-element-3',
                 image: image,
                 alt: image.alt,
                 stretch_width: true,
@@ -139,7 +139,7 @@
 
       {% if mobile_image != blank %}
         <div class="is-hidden-desktop-only">
-          {% render 'image-element',
+          {% render 'image-element-3',
                   image: mobile_image,
                   alt: mobile_image.alt,
                   stretch_width: true
@@ -184,9 +184,9 @@
             {% if subtitle != blank or subtitle_html != blank %}
               <div class="image-with-text-overlay__subheading banner__subheading subtitle">
                 {% if subtitle_html != blank %}
-                  {{ subtitle_html }}
+                  {{ subtitle_html | replace: "<img src=", "<img class='lazy2' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' data-src=" }}
                 {% else %}
-                  {{ subtitle }}
+                  {{ subtitle | replace: "<img src=", "<img class='lazy2' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' data-src=" }}
                 {% endif %}
               </div>
             {% endif %}

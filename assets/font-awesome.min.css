@@ -5,12 +5,12 @@
 
 @font-face{
    font-family:'FontAwesome';
-   src:url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.eot?v=88752339179571016061667225585);
-   src:url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.eot?v=88752339179571016061667225585) format('embedded-opentype'),
-     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.woff2?v=32207045845775034261667225585) format('woff2'),
-     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.woff?v=158931929418379554281667225585) format('woff'),
-     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.ttf?v=57926983875037866361667225585) format('truetype'),
-     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fontawesome-webfont.svg?v=97865491090583646451667225585) format('svg');
+   src:url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.eot?v=88752339179571016061672236268);
+   src:url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.eot?v=88752339179571016061672236268) format('embedded-opentype'),
+     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.woff2?v=32207045845775034261672236268) format('woff2'),
+     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.woff?v=158931929418379554281672236268) format('woff'),
+     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.ttf?v=57926983875037866361672236268) format('truetype'),
+     url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fontawesome-webfont.svg?v=97865491090583646451672236268) format('svg');
    font-weight:normal;
    font-style:normal
  }
@@ -18,12 +18,12 @@
   font-family: 'Font Awesome 5 Brands';
   font-style: normal;
   font-weight: 400;
-  src: url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.eot?v=114244678558180702741667225585);
-  src: url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.eot?v=114244678558180702741667225585) format("embedded-opentype"), 
-       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.woff2?v=142556514329438993601667225585) format("woff2"),
-       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.woff?v=176262358745374929021667225585) format("woff"),
-       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.ttf?v=82927366849999282641667225585) format("truetype"),
-       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/48/assets/fabrands.svg?v=105630613941892303381667225585) format("svg"); 
+  src: url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.eot?v=114244678558180702741672236268);
+  src: url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.eot?v=114244678558180702741672236268) format("embedded-opentype"), 
+       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.woff2?v=142556514329438993601672236268) format("woff2"),
+       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.woff?v=176262358745374929021672236268) format("woff"),
+       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.ttf?v=82927366849999282641672236268) format("truetype"),
+       url(//cdn.shopify.com/s/files/1/0021/3660/4731/t/56/assets/fabrands.svg?v=105630613941892303381672236268) format("svg"); 
 }
 
 

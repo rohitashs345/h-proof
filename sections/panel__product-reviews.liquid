@@ -38,7 +38,7 @@
        data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" 
        data-description="{{ product.description | escape }}" 
        data-product-sku="{{product.handle}}" 
-       data-product-type="{{product.type}}">{{ product.metafields.stamped.reviews }}
+       data-product-type="{{product.type}}">{{ product.metafields.stamped.reviews | replace: '<link href="//cdn1.stamped.io/files/widget.min.css', '<link data-href="//cdn1.stamped.io/files/widget.min.css' | replace: 'stamped-lazyload lazyload" style', 'stamped-lazyloaded lazyloaded lazybg" data-style' | replace: "class='stamped-lazyload' src", "class='stamped-lazyloaded lazy2' data-src2" }}
   </div>
   <!--End Stamped.io Auto Installation-->
 </section>
@@ -178,8 +178,3 @@
   }
 {% endschema %}
 
-{% stylesheet %}
-{% endstylesheet %}
-
-{% javascript %}
-{% endjavascript %}

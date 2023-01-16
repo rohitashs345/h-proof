@@ -2,8 +2,9 @@
 ** Product - main content area **
 - Product template
 {% endcomment %}
-{{ 'product.css' | asset_url | stylesheet_tag }}
-{{ 'product-custom.css' | asset_url | stylesheet_tag }}
+<style class="critical2"></style>
+<link rel="stylesheet" data-href="{{ 'product.css' | asset_url }}">
+<link rel="stylesheet" data-href="{{ 'product-custom.css' | asset_url }}">
 {% render 'style--image-swatch' %}
 {% assign id = section.id %}
 {% comment %} Layout {% endcomment %}

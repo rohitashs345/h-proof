@@ -124,10 +124,10 @@
           <div class="icon-column__image">
             {% if block.settings.image_svg != blank %}
               <div class="icon-column__svg">
-                <img src="{{ block.settings.image_svg }}">
+                <img class="lazy2 lazy3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-src="{{ block.settings.image_svg }}">
               </div>
             {% elsif block.settings.image != blank %}
-              {% render 'image-element',
+              {% render 'image-element-3',
                   image: block.settings.image,
                   additional_classes: 'icon-column__image'
               %}
