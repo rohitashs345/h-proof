@@ -1,0 +1,157 @@
+{% comment %}
+** Slideshow with text **
+{% endcomment %}
+
+{% comment %} Content settings {% endcomment %}
+{%- assign blocks = section.blocks -%}
+{% comment %} End content settings {% endcomment %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{%- assign background_alpha = section.settings.background_color | color_extract: 'alpha' -%}
+{%- assign text_alpha = section.settings.text_color | color_extract: 'alpha' -%}
+
+{% comment %} Section specific CSS {% endcomment %}
+
+{%- capture section_css -%}
+
+.text-slideshow-column {
+  background: {% if background_alpha != 0 %}{{ section.settings.background_color }}{% else %}{{ settings.shop_bg_color }}{% endif %};
+}
+
+.text-slideshow__content .banner__subheading p,
+.text-slideshow__content .title {
+  color: {% if text_alpha != 0 %}{{ section.settings.text_color }}{% else %}{{ settings.regular_color }}{% endif %};
+}
+
+.flickity-page-dots .dot {
+  background: {% if text_alpha != 0 %}{{ section.settings.text_color }}{% else %}{{ settings.regular_color }}{% endif %};
+}
+
+{%- endcapture -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+
+  {% render 'css-loop',
+          css: section_css,
+          id: section.id
+  %}
+  {% render 'css-loop',
+          css: section.settings.custom_css,
+          id: section.id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup  {% endcomment %}
+{% if blocks.size > 0 %}
+  <section class="section
+        {{ section.settings.css_class }}
+        is-width-{{ section.settings.width }}
+        {% if section.settings.show_gutter == false %}
+          has-no-side-gutter
+          has-background
+        {% else %}
+          has-gutter-enabled
+        {% endif %}
+        {% if section.settings.width == 'wide' %}
+          equal-columns--outside-trim
+        {% endif %}
+        ">
+  <div class="slideshow-with-text__container container">
+    <div class="image-slideshow-column
+                three-fifths
+                medium-down--one-whole
+                column
+                image-slideshow-position--{{ section.settings.image_position }}">
+      <div class="image-slideshow image-slideshow--{{ section.settings.image_transition }}" data-image-slideshow>
+        {% for block in blocks %}
+          {% comment %} Content settings {% endcomment %}
+          {%- assign image = block.settings.image -%}
+          {% comment %} End content settings {% endcomment %}
+          <div id="shopify-section-{{ block.id }}" class="image-slideshow__slide" data-slide-index={{ forloop.index0 }} {{ block.shopify_attributes }}>
+            {% if block.settings.button_label == blank and block.settings.button_link != blank %}
+              <a href="{{ block.settings.button_link }}">
+            {% endif %}
+              {% if image != blank %}
+                {% render 'image-element',
+                        image: block.settings.image,
+                        alt: block.settings.image.alt,
+                        stretch_width: true
+                %}
+              {% else %}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            {% if block.settings.button_label == blank and block.settings.button_link != blank %}
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="text-slideshow-column
+                two-fifths
+                medium-down--one-whole
+                column
+                is-align-center
+                is-flex-wrap">
+      <div class="text-slideshow {% if show_dots == false %} flickity-page-dots--hidden {% endif %}" data-text-slideshow data-slide-index={{ forloop.index0 }} {{ block.shopify_attributes }}>
+        {% for block in blocks %}
+
+        <div id="shopify-section-{{ block.id }}" class="text-slideshow__slide
+                                                        text-slideshow__slide--{{ block.id }}"
+                                                        >
+            <div class="text-slideshow__content text-align-{{ section.settings.text_alignment }}">
+              {% if block.settings.pretext != blank %}
+                <div class="text-slideshow__heading banner__subheading">{{ block.settings.pretext }}</div>
+              {% endif %}
+              {% if block.settings.title != blank %}
+                <h2 class="text-slideshow__heading banner__heading title">{{ block.settings.title }}</h2>
+              {% endif %}
+              {% if block.settings.text != blank %}
+                <div class="text-slideshow__heading banner__subheading subtitle content">{{ block.settings.text }}</div>
+              {% endif %}
+              {% if block.settings.button_label != blank %}
+                {% render 'button',
+                        label: block.settings.button_label,
+                        href: block.settings.button_link,
+                        style: section.settings.button_style,
+                        type: "link"
+                %}
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% else %}
+  <div class="container has-padding-top has-padding-bottom text-align-center">
+    <div class="one-whole column">
+      <p>{{ 'homepage.onboarding.no_content' | t }}</p>
+    </div>
+  </div>
+{% endif %}
+
+{% comment %}JavaScript{% endcomment %}
+<script
+    type="application/json"
+    data-section-id="{{ section.id }}"
+    data-section-data
+  >
+  {
+    "text_transition": {{ section.settings.text_transition | json }},
+    "image_transition": {{ section.settings.image_transition | json }},
+    "image_slideshow_speed": {{ section.settings.image_slideshow_speed | json }},
+    "show_arrows": {{ section.settings.show_arrows | json }},
+    "show_nav_buttons": {{ section.settings.show_nav_buttons | json }},
+    "number_of_slides": {{ blocks.size | json }}
+  }
+</script>
+<script data-theme-editor-load-script src="{{ 'z__jsSlideshowWithText.js' | asset_url }}"></script>

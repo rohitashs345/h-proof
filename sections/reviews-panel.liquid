@@ -1,0 +1,35 @@
+<div id="reviews-panel" class="shopify-section product-template product-main has-sidebar-option jsProduct"> 
+  <div id="stamped-main-widget" 
+    data-widget-style="two-columns"
+    data-take="16"
+    data-style-color-star="#ffd200" 
+    data-style-color-verified="#1aebc1" 
+    data-style-color-text="#808080" 
+    data-style-color-link="#333333"
+    data-product-id="{{ product.id }}" 
+    data-name="{{ product.title | escape }}" 
+    data-url="{{ shop.url }}{{ product.url }}"
+    data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}"
+    data-description="{{ product.description | escape }}"
+    data-product-sku="{{product.handle}}"
+    data-widget-language="{{ language }}">
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Reviews Panel",
+    "class": "reviews-panel",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Reviews Panel",
+        "category": "Layout",
+        "settings": {
+
+        }
+      }
+    ]
+  }
+{% endschema %}

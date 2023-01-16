@@ -1,0 +1,20 @@
+.cart__checkout .checkout.disabled {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.cart__cost-summary .normal-customer-warning {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    line-height: 21px;
+    margin: 10px;
+}
+
+@media screen and (max-width: 798px) {
+    .cart__cost-summary .normal-customer-warning {
+        font-size: 11px;
+        line-height: 16px;
+        margin-top: 20px;
+    }
+}

@@ -1,0 +1,249 @@
+{% comment %}Wholesale Customers{% endcomment %}
+{% if customer and customer.tags contains 'wholesale' %}
+  {% render 'header-vertical' %}
+{% endif %}
+
+{% comment %}Schema{% endcomment %}
+{% schema %}
+
+{
+  "name": "Header (Wholesale)",
+  "class": "header header--vertical jsHeader header-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "dropdown_click",
+      "label": "Open dropdowns on click instead of hover",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Advanced",
+      "info": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "copyright",
+      "name": "Copyright",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "copyright_text",
+          "label": "Copyright text"
+        },
+        {
+          "type": "checkbox",
+          "id": "display_designed_by",
+          "label": "Show theme designer credits",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "display_shopify",
+          "label": "Show Powered by Shopify",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "currency",
+      "name": "Currency and languages",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Language selector",
+          "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_locale_selector",
+          "label": "Show language selector",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Currency selector",
+          "info": "To add a currency, go to your [payment settings.](/admin/settings/payments)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_currency_selector",
+          "label": "Show currency selector",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "icons",
+      "name": "Icons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "icons",
+              "label": "Icons only"
+            },
+            {
+              "value": "text",
+              "label": "Text only"
+            },
+            {
+              "value": "icons_text",
+              "label": "Icons and text"
+            }
+          ],
+          "default": "icons"
+        },
+        {
+          "type": "checkbox",
+          "id": "display_search",
+          "label": "Show search icon",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo",
+          "info": "600 x 200px recommended"
+        },
+        {
+          "type": "range",
+          "id": "logo_width",
+          "label": "Width",
+          "min": 20,
+          "max": 100,
+          "default": 80,
+          "unit": "%"
+        }
+      ]
+    },
+    {
+      "type": "navigation",
+      "name": "Navigation",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "main_linklist",
+          "label": "Main menu",
+          "default": "main-menu"
+        },
+        {
+          "type": "color",
+          "id": "nav_background",
+          "label": "Background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "nav_link_color",
+          "label": "Links",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "nav_link_hover_color",
+          "label": "Links hover",
+          "default": "rgba(0,0,0,0)"
+        }
+      ]
+    },
+    {
+      "type": "payment_icons",
+      "name": "Payment icons",
+      "limit": 1
+    },
+    {
+      "type": "search",
+      "name": "Search form",
+      "limit": 1
+    },
+    {
+      "type": "social_media",
+      "name": "Social media",
+      "limit": 1
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Text area can be used for details about blog authors or general information.</p>"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+    },
+    "blocks": [
+      {
+        "type": "logo"
+      },
+      {
+        "type": "icons"
+      },
+      {
+        "type": "search"
+      },
+      {
+        "type": "navigation"
+      },
+      {
+        "type": "payment_icons"
+      },
+      {
+        "type": "copyright"
+      }
+    ]
+  }
+}
+
+{% endschema %}

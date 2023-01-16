@@ -1,0 +1,82 @@
+{% comment %}DTC Customers{% endcomment %}
+{% unless customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.dtc %}
+    <script
+      type="application/json"
+      data-section-type="custom-liquid"
+      data-section-id="{{ section.id }}"
+    >
+    </script>
+    
+    <section {% unless section.settings.fullwidth %}class="section"{% endunless %}>
+      <div {% unless section.settings.fullwidth %}class="container"{% endunless %}>
+        <div class="{% if section.settings.fullwidth %}fullwidth{% else %}one-whole column{% endif %}">
+          {{ section.settings.custom_liquid }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endunless %}    
+
+{% comment %}Wholesale Customers{% endcomment %}
+{% if customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.wholesale %}
+    <script
+      type="application/json"
+      data-section-type="custom-liquid"
+      data-section-id="{{ section.id }}"
+    >
+    </script>
+    
+    <section {% unless section.settings.fullwidth %}class="section"{% endunless %}>
+      <div {% unless section.settings.fullwidth %}class="container"{% endunless %}>
+        <div class="{% if section.settings.fullwidth %}fullwidth{% else %}one-whole column{% endif %}">
+          {{ section.settings.custom_liquid }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Custom liquid",
+  "class": "shopify-section--custom-liquid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "dtc",
+      "label": "Direct To Consumer (DTC)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "wholesale",
+      "label": "Wholesale",
+      "default": true
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom liquid"
+    },
+    {
+      "type": "checkbox",
+      "id": "fullwidth",
+      "label": "Fullwidth",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom liquid",
+      "category": "Content"
+    }
+  ]
+}
+
+{% endschema %}

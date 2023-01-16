@@ -1,0 +1,242 @@
+{% comment %}
+** Header 1 Classic - static **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% assign logo = section.settings.logo %}
+{% assign overlay_logo = section.settings.overlay_logo %}
+{% assign mobile_logo = section.settings.mobile_logo %}
+{% comment %} Advanced {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{% assign header_alpha = settings.header_background | color_extract: 'alpha' %}
+{% assign overlay_alpha = section.settings.overlay_background | color_extract: 'alpha' %}
+{% assign overlay_link_alpha = section.settings.overlay_link_color | color_extract: 'alpha' %}
+{% assign overlay_link_hover_alpha = section.settings.overlay_link_hover_color | color_extract: 'alpha' %}
+
+{% comment %} Opacity level {% endcomment %}
+{% if header_alpha != 0 %}
+  {% assign sticky_background_alpha = section.settings.sticky_background_opacity | divided_by: 100.00 %}
+  {% assign overlay_background_alpha = section.settings.overlay_background_opacity | divided_by: 100.00 %}
+{% endif %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+
+  .header__logo,
+  .logo__content {
+    width: {{ section.settings.logo_width }}px;
+  }
+
+  .is-sticky .header__logo,
+  .is-sticky #mobile-header .mobile-header__logo {
+    width: {{ section.settings.scroll_logo_width }}px;
+  }
+
+  {%- if section.settings.enable_overlay -%}
+    [data-enable_overlay="true"] .header {
+      background-color: {%- if overlay_alpha != 0 -%}{{ section.settings.overlay_background | color_modify: 'alpha', overlay_background_alpha }}{%- else -%}{{ settings.header_background | color_modify: 'alpha', overlay_background_alpha }}{%- endif -%};
+    }
+
+    [data-enable_overlay="true"] .header__logo,
+    .overlay-logo__content {
+      width: {{ section.settings.overlay_logo_width }}px;
+    }
+
+    [data-enable_overlay="true"] .header__link,
+    [data-enable_overlay="true"] .select select {
+      color: {%- if overlay_link_alpha != 0 -%}{{ section.settings.overlay_link_color }}{%- endif -%};
+      fill: {%- if overlay_link_alpha != 0 -%}{{ section.settings.overlay_link_color }}{%- endif -%};
+      {% if section.settings.show_text_shadow %}
+        text-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+      {% endif %}
+    }
+
+    [data-enable_overlay="true"] .header__link:hover,
+    [data-enable_overlay="true"] .header__link.is-active,
+    [data-enable_overlay="true"] .select select:hover {
+      color: {%- if overlay_link_hover_alpha != 0 -%}{{ section.settings.overlay_link_hover_color }}{%- endif -%};
+      fill: {%- if overlay_link_hover_alpha != 0 -%}{{ section.settings.overlay_link_hover_color }}{%- endif -%};
+    }
+  {%- endif -%}
+  {%- if section.settings.enable_sticky -%}
+    .header-sticky-wrapper.is-sticky .header {
+      background-color: {{ settings.header_background | color_modify: 'alpha', sticky_background_alpha }};
+    }
+
+    #mobile-header-sticky-wrapper.is-sticky .mobile-header {
+      background-color: {{ settings.header_background | color_modify: 'alpha', sticky_background_alpha }};
+    }
+
+    .mobile-menu--opened #mobile-header-sticky-wrapper.is-sticky .mobile-header {
+      background-color: {{ settings.header_background }};
+    }
+  {%- endif -%}
+{%- endcapture -%}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: id
+  %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{%- comment -%} {% for link in linklists[section.settings.main_linklist].links %}
+
+  <input type="checkbox" id="{{ link.title | handleize }}"> {{ link.title | handleize }}
+{% endfor %} {%- endcomment -%}
+
+{% comment %} HTML markup {% endcomment %}
+<div class="is-relative {{ css_class }}" data-enable_overlay="{{ section.settings.enable_overlay }}" data-enable_sticky="{{ section.settings.enable_sticky }}">
+  <header id="header" class="header dropdown-style-{{ settings.dropdown_style }} box-shadow-{{ settings.show_dropdown_shadow }}">
+    <section class="section
+                    is-width-{{ width }}">
+      <div class="container">
+        <div class="navbar dropdown-click--{{ section.settings.dropdown_click }} is-align-center is-justify-space-between vertical-alignment-{{ section.settings.vertical_alignment }} one-whole column">
+          <div class="header__brand {% if product.tags contains 'lp' %}fullwidth is-justify-center{% endif %}">
+            {% if section.settings.enable_overlay and section.settings.overlay_logo != blank %}
+              {% if template.name == 'index' %}
+                <h1 class="visuallyhidden">{{ shop.name }}</h1>
+              {% endif %}
+              <div class="overlay-logo__content">
+                {% unless product.tags contains 'lp' %}<a class="header__logo header__link overlay-logo" href="{{ routes.root_url }}" title="{{ shop.name }}">{% endunless %}
+                  {% render 'image-element',
+                          image: section.settings.overlay_logo,
+                          alt: section.settings.overlay_logo.alt,
+                          additional_classes: 'overlay-logo',
+                          back_to_basics: true
+                  %}
+                {% unless product.tags contains 'lp' %}</a>{% endunless %}
+              </div>
+              <div class="logo__content">
+                {% if section.settings.logo != blank or section.settings.logo_svg != blank %}
+                  <h1 class="visuallyhidden">{{ shop.name }}</h1>
+                  {% unless product.tags contains 'lp' %}<a class="header__logo header__link primary-logo" href="{{ routes.root_url }}" title="{{ shop.name }}">{% endunless %}
+                    {% if section.settings.logo_svg != blank %}
+                      <div class="icon-column__svg">
+                        <img src="{{ section.settings.logo_svg }}">
+                      </div>
+                    {% elsif block.settings.image != blank %}
+                      {% render 'image-element',
+                                    image: section.settings.logo,
+                                    alt: section.settings.logo.alt,
+                                    additional_classes: 'primary-logo'
+                            %}
+                    {% endif %}
+                  {% unless product.tags contains 'lp' %}</a>{% endunless %}
+                {% else %}
+                  <h1 class="header__logo-text">
+                    {% unless product.tags contains 'lp' %}<a href="{{ routes.root_url }}" class="header__link primary-brand">{% endunless %}
+                      {{ shop.name }}
+                    {% unless product.tags contains 'lp' %}</a>{% endunless %}
+                  </h1>
+                {% endif %}
+              </div>
+            {% elsif section.settings.logo != blank or section.settings.logo_svg != blank %}
+              {% if template.name == 'index' %}
+                <h1 class="visuallyhidden">{{ shop.name }}</h1>
+              {% endif %}
+              {% unless product.tags contains 'lp' %}<a class="header__logo header__link primary-logo" href="{{ routes.root_url }}" title="{{ shop.name }}">{% endunless %}
+                {% if section.settings.logo_svg != blank %}
+                  <div class="icon-column__svg">
+                    <img src="{{ section.settings.logo_svg }}">
+                  </div>
+                {% elsif block.settings.image != blank %}
+                  {% render 'image-element',
+                                image: section.settings.logo,
+                                alt: section.settings.logo.alt,
+                                additional_classes: 'primary-logo'
+                        %}
+                {% endif %}
+              {% unless product.tags contains 'lp' %}</a>{% endunless %}
+            {% else %}
+              {% if template.name == 'index' %}
+                <h1 class="header__logo-text">
+                  {% unless product.tags contains 'lp' %}<a href="{{ routes.root_url }}" class="header__link primary-brand">{% endunless %}
+                    {{ shop.name }}
+                  {% unless product.tags contains 'lp' %}</a>{% endunless %}
+                </h1>
+              {% else %}
+                {% unless product.tags contains 'lp' %}<a href="{{ routes.root_url }}" class="header__logo-text header__link primary-brand">{% endunless %}
+                  {{ shop.name }}
+                {% unless product.tags contains 'lp' %}</a>{% endunless %}
+              {% endif %}
+            {% endif %}
+          </div>
+
+          {% unless product.tags contains 'lp' %}
+            <div class="header__menu is-justify-{{ section.settings.menu_alignment }}">
+              <nav class="header__menu-items is-flex is-flex-wrap is-justify-{{ section.settings.menu_alignment }} header__dropdown--{{ settings.dropdown_position }}" role="navigation" aria-label="main navigation">
+                {% assign main_menu = linklists[section.settings.main_linklist] %}
+                {% for link in main_menu.links %}
+                  {% if link.links == blank %}
+                    <div class="navbar-item header__item {% if link.active or link.child_active %}is-active{% endif %}" data-navlink-handle="{{ link.title | handleize }}">
+                      <label for="mega-{{ link.title | handleize }}">
+                        <a {% unless link.url == 'http://' or link.url == '' or link.url == 'https://' or link.url == '#' %} href="{{ link.url }}" {% endunless %} class="navbar-link header__link {% if link.active %}is-active{% endif %} is-arrowless">
+                          {{ link.title }}
+                        </a>
+                      </label>
+                    </div>
+                  {% else %}
+                    <div class="navbar-item header__item has-dropdown has-dropdown--{{ settings.dropdown_style }} is-hoverable {% if link.active or link.child_active %}is-active{% endif %}" aria-haspopup="true" aria-expanded="false" data-navlink-handle="{{ link.title | handleize }}">
+                      <label for="dropdown-{{ link.title | handleize }}">
+                        <a {% unless link.url == 'http://' or link.url == '' or link.url == 'https://' or link.url == '#' %} href="{{ link.url }}" {% endunless %} class="navbar-link header__link {% if link.active or link.child_active %}is-active{% endif %}">
+                          {{ link.title }}
+                        </a>
+                      </label>
+                      {% render 'header__dropdown-menu',
+                              link: link,
+                              index: forloop.index
+                      %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </nav>
+            </div>
+  
+            {% render 'header__action-icons',
+                    display_search: section.settings.display_search,
+                    icon_style: section.settings.icon_style
+            %}
+          {% endunless %}
+        </div>
+      </div>
+    </section>
+  </header>
+
+  {% render 'mobile-header' %}
+
+  {% if settings.search_display_style == 'overlay' %}
+    {% render 'search-overlay' %}
+  {% endif %}
+
+</div>
+
+{% comment %}JavaScript{% endcomment %}
+<script
+  type="application/json"
+  data-section-id="{{ section.id }}"
+  data-section-data
+>
+  {
+    "enable_overlay": {{ section.settings.enable_overlay | json }},
+    "enable_sticky": {{ section.settings.enable_sticky | json }},
+    "header_layout": {{ settings.header_layout | json }},
+    "dropdown_click": {{ section.settings.dropdown_click | json }}
+  }
+</script>
+<script src="{{ 'z__jsHeader.js' | asset_url }}"></script>

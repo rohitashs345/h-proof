@@ -1,0 +1,257 @@
+{% comment %}DTC Customers{% endcomment %}
+{% unless customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.dtc %}
+    {% render 'section-custom__featured-testimonials' %}
+  {% endif %}
+{% endunless %}    
+
+{% comment %}Wholesale Customers{% endcomment %}
+{% if customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.wholesale %}
+    {% render 'section-custom__featured-testimonials' %}
+  {% endif %}
+{% endif %}
+
+{% schema %}
+
+{
+  "name": "Featured Testimonials",
+  "class": "testimonials jsTestimonials",
+  "max_blocks": 21,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "dtc",
+      "label": "Direct To Consumer (DTC)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "wholesale",
+      "label": "Wholesale",
+      "default": true
+    },
+    {
+   "type": "header",
+   "content": "Testimonials Title"
+    },
+    {
+    "type": "text",
+    "id": "title",
+    "label": "Title",
+    "default": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_text",
+      "label": "Text Color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background Color",
+      "default": "#FAFAFA"
+    },
+	{
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#19E5BB"
+    },
+	{
+      "type": "header",
+      "content": "Scroll Settings"
+    },
+    {
+       "type": "checkbox",
+       "id": "autoplay",
+       "default": true,
+       "label": "Automatically scroll"
+    },
+    {
+      "type":      "range",
+      "id":        "playtime",
+      "min":       1,
+      "max":       12,
+      "step":      1,
+      "label":     "Scroll Speed",
+      "default":   3,
+	  "unit": "sec"
+    },
+    {
+       "type": "radio",
+       "id": "fade_scroll",
+       "options": [
+          { "value": "true", "label": "Fade"},
+          { "value": "false", "label": "Slide"}
+       ],
+       "label": "Slider Mode"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wide",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "Animation",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fadeIn",
+          "label": "Fade in"
+        },
+        {
+          "value": "fadeInDown",
+          "label": "Fade in down"
+        },
+        {
+          "value": "fadeInLeft",
+          "label": "Fade in left"
+        },
+        {
+          "value": "fadeInRight",
+          "label": "Fade in right"
+        },
+        {
+          "value": "slideInLeft",
+          "label": "Slide in left"
+        },
+        {
+          "value": "slideInRight",
+          "label": "Slide in right"
+        },
+        {
+          "value": "zoomIn",
+          "label": "Zoom in"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "paragraph",
+      "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+            "type":      "range",
+            "id":        "rating",
+            "min":       0,
+            "max":       5,
+            "step":      1,
+            "label":     "Star Rating",
+            "default":   5
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Text",
+          "default": "<p>“Sed posuere consectetur est at lobortis. Integer posuere erat a<br> ante venenatis dapibus posuere velit aliquet. Lorem ipsum dolor<br> sit amet, consectetur adipiscing elit.”</p>"
+        },
+        {
+          "type": "header",
+          "content": "Name"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Customer name</p>"
+        },
+		{
+          "type": "text",
+          "id": "date",
+          "label": "Testimonial Date",
+          "default": "Date"
+        }
+        
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Testimonials",
+      "category": "Store information",
+      "settings": {
+          "padding_top": 20,
+          "padding_bottom": 20
+      },
+      "blocks": [
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}

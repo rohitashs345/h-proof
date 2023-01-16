@@ -1,0 +1,80 @@
+{% assign collection_handles = product.collections | map: 'handle' %}
+{% assign option_index = 0 %}
+{% for option in product.options_with_values %}
+  {% assign is_flavor = false %}
+  {% assign option_index = forloop.index0 %}
+  {% assign downcased_option = option.name | downcase %}
+  {% if downcased_option contains 'flavor' %}
+    {% assign is_flavor = true %}
+  {% endif %}
+  {% if is_flavor %}
+    {% assign values = '' %}
+    {% for variant in product.variants %}
+      {% assign value = variant.options[option_index] %}
+      {% unless values contains value %}
+      {% assign values = values | join: ',' %}  
+      {% assign values = values | append: ',' | append: value %} 
+      {% assign values = values | split: ',' %}
+        <div class="
+        {%
+          render 'column-width',
+          value: products_per_row
+        %}
+        medium-down--one-half
+        {% if mobile_products_per_row == '1' %}
+          small-down--one-whole
+        {% else %}
+          small-down--one-half
+        {% endif %}
+        column
+        {% if settings.enable_quickshop %}
+          quick-shop--true
+          quick-shop--closed
+          product-{{ product.id }} js-product_section
+        {% endif %}
+        {% if settings.stickers_enabled %}
+          has-thumbnail-sticker
+        {% endif %}
+        {% if product.media[1] != blank and settings.show_secondary_image == true %}
+          has-secondary-image-swap
+        {% endif %}
+        thumbnail
+        product__thumbnail
+        product__grid-item
+        thumbnail__hover-overlay--{{ hover_enabled }}
+        has-padding-bottom"
+        {% if section.settings.pagination_type != 'basic_pagination' %}
+          data-load-more--grid-item
+        {% endif %}>
+        <div class="product-wrap">
+          <div class="product-image__wrapper">
+            <div class="image__container product__imageContainer">
+              <a href="{{ variant.url | within: collection }}">
+                {%
+                  render 'image-element',
+                  image: variant.image.src,
+                  alt: alt_text,
+                  object_fit: align_height,
+                  max_height: height
+                %}
+              </a>
+            </div>
+          </div>
+          <div class="thumbnail__caption text-align-{{ settings.thumbnail_text_alignment }}">
+            {%
+              render 'product-thumbnail__product-info',
+              product: product,
+              variant_title: value,
+              variant: variant
+              collection_handles: collection_handles
+            %}
+          </div>
+          <div class="product-thumbnail__buttons is-justify-center mt-sm">
+            <a class="button button--primary " href="{{ variant.url }}">Shop Now</a>
+          </div>
+        </div>
+        </div>
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}

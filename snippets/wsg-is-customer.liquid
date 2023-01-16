@@ -1,0 +1,11 @@
+{%- if customer.tags != blank -%}
+	{%- for tag in customer.tags -%}
+		{%- if shop.metafields.wsg_data.excludeCollections contains tag -%}
+			{%- assign wsgActiveCustomer = 'yes' -%}                    
+			{%- continue -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- else -%} 
+	{%- assign wsgActiveCustomer = 'no' -%}     
+{%- endif -%}
+{{ wsgActiveCustomer }}

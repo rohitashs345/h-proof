@@ -1,0 +1,260 @@
+{% comment %}Assign object as block or section{% endcomment %}
+{% if type == 'block' %}
+  {% assign object = block %}
+{% else %}
+  {% assign object = section %}
+{% endif %}
+
+{% assign id = object.id %}
+{% comment %}Layout{% endcomment %}
+{% assign width = object.settings.width %}
+{% assign padding_top = object.settings.padding_top %}
+{% assign padding_bottom = object.settings.padding_bottom %}
+{% assign animation = object.settings.animation | default: 'none' %}
+{% assign card_text = object.settings.card_text %}
+{% assign card_background = object.settings.card_background %}
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = object.settings.css_class %}
+{% assign custom_css = object.settings.custom_css %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{% assign card_text_alpha = card_text | color_extract: 'alpha' %}
+{% assign card_background_alpha = card_background | color_extract: 'alpha' %}
+{% assign img_height_string = 0 %}
+
+ {% for block in section.blocks %}
+	{% assign img_height_string = img_height_string | append:',' | append: block.settings.image.height %}
+ {% endfor %}
+
+{% assign img_height_array = img_height_string | split:',' | sort | reverse %}
+
+{% capture section_css -%}
+
+
+
+  .carousel-title, .carousel-description p {
+    color: {%- if card_text_alpha != 0 -%}{{ card_text }}{%- endif -%};
+  }
+
+
+  .features-carousel .flickity-button-icon {
+      fill: {%- if card_text_alpha != 0 -%}{{ card_text }};{%- endif -%};
+  }
+
+
+{%- endcapture -%}
+
+
+{% style %}
+
+  #shopify-section-{{ id }} {
+    background-color: {%- if card_background_alpha != 0 -%}{{ card_background }}{%- endif -%};
+    padding-top: {{ padding_top }}px;
+    padding-bottom: {{ padding_bottom }}px;
+    margin-top: {{section.settings.margin_top}}px;
+    margin-bottom: {{section.settings.margin_bottom}}px;
+
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+
+  {% if section.settings.show_line %}
+    #shopify-section-{{ id }} .features-carousel-header {
+      position: relative;
+    }
+    #shopify-section-{{ id }} .features-carousel-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background-color: #d0d0d0;
+      height: 1px;
+      max-width: 235px;
+      margin: auto;
+    }
+  {% endif %}
+
+ @media (max-width:480px) {
+
+#shopify-section-{{ id }} {
+    padding-top: {{ padding_top | divided_by: 2 }}px;
+    padding-bottom: {{ padding_bottom | divided_by: 5 }}px;
+    margin-top: {{section.settings.margin_top  | divided_by: 2}}px;
+    margin-bottom: {{section.settings.margin_bottom | divided_by: 2}}px;
+
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+
+
+
+
+}
+  {% render 'css-loop',
+          css: section_css,
+          id: id
+  %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+
+  .carousel-image {
+    min-height: {{ img_height_array[0.5] }}px;
+  }
+  .custom-features-grid .testimonials {
+    justify-content: center;
+  }
+
+  .custom-features-grid .one-fourth {
+    width: calc(20% - 20px);
+  }
+
+  .features-carousel .custom-features-grid  .features-carousel-heading {
+    color: #000;
+    margin-bottom: 30px;
+  }
+
+  .testimonial__action {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .testimonial__btn {
+    letter-spacing: 1.8px;
+    color: #434343;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .features-carousel .features-carousel-heading {
+    letter-spacing: 1.8px;
+  }
+
+  @media(max-width: 767px) {
+    .features-carousel .custom-features-grid  .features-carousel-heading {
+      margin-bottom: 5px;
+    }
+
+    .custom-features-grid .one-fourth {
+      width: calc(50% - 20px);
+      margin-bottom: 30px;
+    }
+
+    .features-carousel .custom-features-grid .features-carousel-heading {
+      margin-bottom: 10px;
+    }
+
+    .features-carousel .custom-features-grid .carousel-title {
+      padding-top: 8px;
+    }
+
+    .custom-features-grid .carousel-image img {
+      vertical-align: middle;
+    }
+
+    .features-carousel .custom-features-grid .carousel-title {
+      font-size: 15px;
+    }
+  }
+
+{% endstyle %}
+
+
+
+
+<section {% if section.settings.id %}id="{{ section.settings.id }}"{% endif %} class="section features-carousel {% if section.settings.style == 'grid' %}custom-features-grid {% endif %}
+                {{ css_class }}
+                is-width-{{ width }}
+                {% if section.blocks.size == 1 %}mobile-slider desktop-slider--disabled{% endif %}
+                "
+          {% if animation != "none" %}
+            data-scroll-class="{{ animation }}"
+          {% endif %}>
+
+    <div class="features-carousel-header">
+      <div class="features-carousel-heading">
+        {{- section.settings.head -}}
+      </div>
+      {% if section.settings.subhead != blank %}
+        <div class="features-carousel-subheading">
+          {{- section.settings.subhead -}}
+        </div>
+      {% endif %}
+    </div>
+
+  <div class="testimonials features-carousel-slider container"
+       {% if section.blocks.size > 4 %}data-carousel-slider{% endif %}
+       data-autoplay="{% if section.settings.autoplay == false %}false{% else %}{{section.settings.playtime | times: 1000}}{% endif %}"
+       >
+
+
+
+    {% for block in section.blocks %}
+
+    {% if section.blocks.size >= 4 %}
+      {% assign column-value = 4 %}
+    {% else %}
+      {% assign column-value = section.blocks.size %}
+    {% endif %}
+
+
+
+    <div id="shopify-section-{{ block.id }}"
+         class="testimonial-block
+                block--{{ block.id }}
+                column
+                has-images-enabled-false
+                testimonial-border--false
+                testimonial-align--center
+                {% render 'column-width', value: column-value %}
+                medium-down--one-whole" data-testimonial-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+
+
+      <div class="carousel-image">
+
+      	<img width="{{ block.settings.img_width }}" src="{{ block.settings.image | img_url: 'master' }}">
+
+      </div>
+	  <div class="item-text-footer">
+        <div class="carousel-title">
+
+          {{ block.settings.title }}
+
+        </div>
+        <div class="carousel-description">
+
+          {{ block.settings.description }}
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if section.settings.btn != blank %}
+    <div class="testimonial__action">
+      <a class="testimonial__btn" href="{{ section.settings.btn_link }}"> {{- section.settings.btn -}} </a>
+    </div>
+  {% endif %}
+</section>
+
+{% comment %}JavaScript{% endcomment %}
+<script
+  type="application/json"
+  data-section-id="{{ object.id }}"
+  data-section-data
+>
+  {
+  }
+</script>
+
+  {% if section.settings.style == 'slider' %}
+    <script data-theme-editor-load-script src="{{ 'z__jsFeaturesCarousel.js' | asset_url }}"></script>
+  {% endif %}

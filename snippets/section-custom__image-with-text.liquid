@@ -1,0 +1,167 @@
+{% comment %}
+** Image with text **
+{% endcomment %}
+
+{% comment %} Content settings {% endcomment %}
+{%- assign blocks = section.blocks -%}
+{% comment %} End content settings {% endcomment %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section.settings.custom_css,
+          id: section.id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+<section class="section
+                {{ section.settings.css_class }}
+                is-width-{{ section.settings.width }}
+                {% if section.settings.show_gutter == false %}
+                  has-no-side-gutter
+                  has-background
+                {% else %}
+                  has-gutter-enabled
+                {% endif %}
+                {% if section.settings.width == 'wide' %}
+                  equal-columns--outside-trim
+                {% endif %}
+                "
+                {% if section.settings.animation != "none" %}
+                  data-scroll-class="{{ section.settings.animation }}"
+                {% endif %}>
+  <div class="container
+              ">
+    {% if blocks.size > 0 %}
+      {% for block in blocks %}
+
+        {% if block.type != 'image' %}
+
+          {% comment %} Content settings {% endcomment %}
+          {%- assign text = block.settings.text -%}
+          {% comment %} End content settings {% endcomment %}
+
+          {% comment %} Is the color set to transparent? {% endcomment %}
+          {%- assign background_alpha = block.settings.background | color_extract: 'alpha' -%}
+          {%- assign text_alpha = block.settings.text_color | color_extract: 'alpha' -%}
+          {% comment %} Block specific CSS {% endcomment %}
+          {% capture block_css -%}
+
+            .image-with-text__heading {
+              color: {%- if text_alpha != 0 -%}{{ block.settings.text_color }}{%- else -%}{{ settings.heading_color }}{%- endif -%};
+            }
+
+            .image-with-text__text {
+              color: {%- if text_alpha != 0 -%}{{ block.settings.text_color }}{%- else -%}{{ settings.regular_color }}{%- endif -%};
+            }
+          {%- endcapture -%}
+
+          {% style %}
+            #shopify-section-{{ block.id }} {
+                background-color: {%- if background_alpha != 0 -%}{{ block.settings.background }}{% endif %};
+              }
+            {% render 'css-loop',
+                    css: block_css,
+                    id: block.id
+            %}
+          {% endstyle %}
+
+          <div class="image-with-text__text-column
+                      image-with-text__column
+                      {% render 'column-width', value: forloop.length %}
+                      medium-down--one-whole
+                      column
+                      has-padding-left
+                      has-padding-right
+                      {% if background_alpha != 0 %}has-background {% endif %}
+                      is-flex
+                      is-flex-wrap
+                      is-justify-{{ block.settings.alignment }}
+                      is-align-{{ block.settings.vertical_position }}
+                      "
+                      {% if type != 'block' %}
+                        {{ block.shopify_attributes }} id="shopify-section-{{ block.id }}"
+                      {% endif %}>
+            <div class="image-with-text__wrapper">
+              {% if block.settings.title != blank %}
+                <h3 class="image-with-text__heading text-align-{{ block.settings.alignment }} is-{{ block.settings.heading_size }} {% if block.settings.uppercase %}uppercase{% endif %}" >
+                  {{ block.settings.title }}
+                </h3>
+              {% endif %}
+
+              {% if text != blank or block.settings.custom_html != blank %}
+                <div class="image-with-text__text text-align-{{ block.settings.alignment }} content">
+                {% if block.settings.custom_html != blank %}
+                  {{ block.settings.custom_html }}
+                {% else %}
+                  {{ text }}
+                {% endif %}
+                </div>
+              {% endif %}
+
+              {% if block.settings.button_label != blank %}
+                <div class="buttons is-{{ block.settings.alignment }}">
+                  {% render 'button',
+                          label: block.settings.button_label,
+                          href: block.settings.link,
+                          style: block.settings.button_style,
+                          type: "link"
+                  %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+        {% elsif block.type == 'image' %}
+
+          {% comment %} Content settings {% endcomment %}
+          {%- assign image = block.settings.image -%}
+          {% comment %} End content settings {% endcomment %}
+
+          <div class="image-with-text__image-column
+          image-with-text__column
+          {% if forloop.length == 1 %}
+            one-whole
+          {% elsif forloop.length == 2 %}
+            one-half
+          {% elsif forloop.length == 3 %}
+            one-third
+          {% endif %}
+          medium-down--one-whole
+          column
+          is-flex
+          is-align-center
+          {% if block.settings.image_crop != 'none' %}has-image-crop{% endif %}
+          image-crop--{{ block.settings.image_crop }}" {% if type != 'block' %}{{ block.shopify_attributes }} id="shopify-section-{{ block.id }}"{% endif %}>
+            {% if block.settings.image_link %}
+              <a class="image-with-text__link" href="{{ block.settings.image_link }}">
+            {% endif %}
+              {% if image != blank %}
+                {% render 'image-element',
+                        image: image,
+                        alt: image.alt,
+                        stretch_width: true,
+                        additional_classes: 'image-with-text__image'
+                %}
+              {% else %}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            {% if block.settings.image_link %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+    {% endfor %}
+  {% endif %}
+
+  </div>
+</section>

@@ -1,0 +1,111 @@
+/*.fa-star-half-o:before, .fa-star-o:before, .fa-star:before, .stamped-fa-star-half-o:before, .stamped-fa-star-o:before, .stamped-fa-star:before {
+  color: #FFE65C;
+}*/
+
+/*.three-step-form .purchase-details__buttons .button {
+  font-size: 14px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}*/
+
+@media (max-width: 990px) and (min-width: 768px) {
+  .product-gallery {
+    margin: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  #products-info {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .product_name.title {
+    font-size: 24px;
+    line-height: 25px;
+    letter-spacing: 0.24px;
+  }
+
+  .three-step-form .product-form-container {
+    border: 2px solid #F2F2F2;
+    border-radius: 20px;
+    padding: 20px 8px;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .product-template {
+    padding-bottom: 0px !important;
+    padding-top: 10px !important;
+  }
+
+  /*.product_name, .products-custom, .reviews-badge, .product-block--text-with-hover, .product-block--description, .product-block--custom-html, .product-block--custom-pop-up {
+    padding-left: 25px;
+    padding-right: 25px;
+  }*/
+
+  .product-block {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .three-step-form .product-block:not(.product-block--form) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .purchase-details__buttons .button {
+    min-height: unset;
+  }
+
+  .accordion dt a, .accordion dt button, .faq-accordion dt a, .faq-accordion dt button {
+    padding: 10px 40px 10px 20px;
+    font-size: 11px;
+  }
+
+  .page-faq__column-wrap .icon {
+    width: 11px;
+    height: 11px;
+  }
+
+  .page-faq__column-wrap .buttons {
+    margin-top: 20px;
+  }
+
+  .column-wrapper .faq-title {
+    font-size: 21px;
+    color: #000;
+  }
+
+  .product-gallery__image {
+    width: 100%;
+    padding: 0 25px;
+  }
+
+  .accordion dd, .faq-accordion dd {
+    font-size: 11px;
+  }
+
+  .product-main .product__images {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .custom-section-product {
+    width: 100%;
+  }
+
+  .product-main .product__images {
+    width: 100%;
+  }
+
+  .product-gallery .product-gallery__main .flickity-prev-next-button.previous {
+    left: 10px;
+  }
+
+  .product-gallery .product-gallery__main .flickity-prev-next-button.next {
+    right: 10px;
+  }
+}

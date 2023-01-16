@@ -1,0 +1,249 @@
+{% comment %}DTC Customers{% endcomment %}
+{% unless customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.dtc %}
+    {% render 'section-custom__features-carousel' %}
+  {% endif %}
+{% endunless %}    
+
+{% comment %}Wholesale Customers{% endcomment %}
+{% if customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.wholesale %}
+    {% render 'section-custom__features-carousel' %}
+  {% endif %}
+{% endif %}
+
+{% schema %}
+
+{
+  "name": "Features Carousel",
+  "class": "features-carousel jsTestimonials",
+  "max_blocks": 21,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "dtc",
+      "label": "Direct To Consumer (DTC)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "wholesale",
+      "label": "Wholesale",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "id",
+      "label": "Set id for section"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "default": "slider",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line",
+      "label": "Display line on Header",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "card_text",
+      "label": "Text Color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background Color",
+      "default": "#FAFAFA"
+    },
+	{
+      "type": "header",
+      "content": "Scroll Settings"
+    },
+    {
+       "type": "checkbox",
+       "id": "autoplay",
+       "default": true,
+       "label": "Automatically scroll"
+    },
+    {
+      "type":      "range",
+      "id":        "playtime",
+      "min":       1,
+      "max":       12,
+      "step":      1,
+      "label":     "Scroll Speed",
+      "default":   3,
+	  "unit": "sec"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "head",
+      "label": "Heading",
+      "default": "<p>Title</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "subhead",
+      "label": "Subheading",
+      "default": "<p>Sed posuere consectetur est at lobortis.</p>"
+    },
+    {
+      "type": "text",
+      "id": "btn",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Link Button"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wide",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "paragraph",
+      "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "carousel-item",
+      "name": "Carousel Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Add Image"
+        },
+        {
+          "type":      "range",
+          "id":        "img_width",
+          "min":       30,
+          "max":       480,
+          "step":      10,
+          "label":     "Image Width",
+          "default":   100,
+          "unit": "px"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "<p>Title</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Sed posuere consectetur est at lobortis.</p>"
+        }
+
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features Carousel",
+      "category": "Image",
+      "settings": {
+
+      }
+    }
+  ]
+}
+
+{% endschema %}

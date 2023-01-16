@@ -1,0 +1,369 @@
+{% comment %}DTC Customers{% endcomment %}
+{% unless customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.dtc %}
+    {% render 'section-custom__split-slider' %}
+  {% endif %}
+{% endunless %}    
+
+{% comment %}Wholesale Customers{% endcomment %}
+{% if customer and customer.tags contains 'wholesale' %}
+  {% if section.settings.wholesale %}
+    {% render 'section-custom__split-slider' %}
+  {% endif %}
+{% endif %}
+
+{% schema %}
+
+{
+  "name": "Split Slideshow",
+  "class": "jsSlideshowWithText slideshow-with-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "dtc",
+      "label": "Direct To Consumer (DTC)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "wholesale",
+      "label": "Wholesale",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "slideshow_title",
+      "label": "Text",
+      "default": "3 Simple Steps"
+    },
+	{
+      "type": "header",
+      "content": "Scroll"
+    },
+	{
+       "type": "checkbox",
+       "id": "autoplay",
+       "default": true,
+       "label": "Automatically scroll"
+    },
+    {
+      "type": "range",
+      "id": "image_slideshow_speed",
+      "label": "Scroll speed",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 8,
+      "unit": "sec"
+    },
+	{
+      "type": "header",
+      "content": "Transition"
+    },
+    {
+      "type": "radio",
+      "id": "image_transition",
+      "label": "Transition",
+      "options": [
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "header",
+      "content": "Content Position"
+    },
+    {
+      "type": "radio",
+      "id": "image_position",
+      "label": "Position",
+      "options": [
+		{
+          "value": "right",
+          "label": "Text Left/Image Right"
+        },
+        {
+          "value": "left",
+          "label": "Image Left/Text Right"
+        }
+        
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },    
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_transition",
+      "label": "Text transition",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "fadeIn",
+          "label": "Fade in"
+        },
+        {
+          "value": "fadeInDown",
+          "label": "Fade in down"
+        },
+        {
+          "value": "fadeInLeft",
+          "label": "Fade in left"
+        },
+        {
+          "value": "fadeInRight",
+          "label": "Fade in right"
+        },
+        {
+          "value": "zoomIn",
+          "label": "Zoom in"
+        }
+      ],
+      "default": "fadeIn"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "button--link-style",
+          "label": "Link style"
+        }
+      ],
+      "default": "button--link-style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav_buttons",
+      "label": "Show navigation dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gutter",
+      "label": "Show gutter",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "paragraph",
+      "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+      "type": "text",
+      "id": "css_class",
+      "label": "CSS Class"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image",
+          "info": "960 x 960px recommended"
+        },
+		{
+          "type": "image_picker",
+          "id": "image_phone",
+          "label": "Mobile Image",
+          "info": "760 x 510px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Main Icon",
+          "info": "50 x 50px recommended"
+        },
+    	{
+          "type": "checkbox",
+          "id": "show_svg_icon",
+          "label": "Show SVG Icon",
+          "default": true
+        },
+        {
+          "id": "icon_svg_link",
+          "type": "url",
+          "label": "Icon SVG Link"
+        },
+		{
+          "type": "image_picker",
+          "id": "icon_active",
+          "label": "Add Thumbnail Icon Image Active",
+		  "info": "20 x 20px recommended"
+        },
+		{
+          "type": "image_picker",
+          "id": "icon_inactive",
+          "label": "Add Thumbnail Icon Image Inactive",
+		  "info": "20 x 20px recommended"
+        },
+    	{
+          "type": "color",
+          "id": "background_color",
+          "label": "Background",
+          "default": "#9EF2E1"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "#333"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Your headline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Each slide can have its own text and button link. Use it to describe the product, collection, page, etc. that the image depicts.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Link Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Split Slideshow",
+    "category": "Image",
+    "settings": {
+    },
+    "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "title": "Slideshow with Text",
+            "text": "<p>Each slide can have its own text and button link. Use it to describe the product, collection, page, etc. that the image depicts.</p>",
+            "button_label": "Click here"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "title": "Second slide",
+            "text": "<p>Each slide can use different text to accompany the image.</p>",
+            "button_label": "Link to product"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}

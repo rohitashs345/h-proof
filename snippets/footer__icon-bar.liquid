@@ -1,0 +1,87 @@
+{% comment %}
+** Icon bar for footer - static **
+{% endcomment %}
+
+{% assign id = section.id %}
+{% comment %}Colors{% endcomment %}
+{% assign background = section.settings.background %}
+{% assign link = section.settings.link_color %}
+{% assign link_hover = section.settings.link_hover_color %}
+{% assign text = section.settings.text_color %}
+{% comment %} Advanced {% endcomment %}
+{% assign width = section.settings.width %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{% assign background_alpha = background | color_extract: 'alpha' %}
+{% assign link_alpha = link | color_extract: 'alpha' %}
+{% assign link_hover_alpha = link_hover | color_extract: 'alpha' %}
+{% assign text_alpha = text | color_extract: 'alpha' %}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+
+  a.icon-bar__block {
+    color: {%- if link_alpha != 0 -%}{{ link }}{%- endif -%};
+  }
+
+  a.icon-bar__block:hover {
+    color: {%- if link_hover_alpha != 0 -%}{{ link_hover }}{%- endif -%};
+  }
+
+  .icon-bar__block {
+    color: {%- if text_alpha != 0 -%}{{ text }}{%- endif -%};
+  }
+{%- endcapture -%}
+
+{% style %}
+  #shopify-section-{{ id }} {
+    background-color: {%- if background_alpha != 0 -%}{{ background }}{%- endif -%};
+    {% if width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+
+  {% render 'css-loop',
+          css: section_css,
+          id: id
+  %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+{% if section.settings.show_icon_bar and section.blocks.size > 0 %}
+  <section class="section
+                  has-padding-top
+                  has-padding-bottom
+                  is-width-{{ width }}
+                  {{ css_class }}">
+    <div class="container is-justify-{{ section.settings.alignment }}">
+      {% for block in section.blocks %}
+
+        {% assign icon = block.settings.icon | downcase %}
+
+        {% if block.settings.link %}
+          <a href="{{ block.settings.link }}" class="icon-bar__block is-{{ section.settings.size }} is-flex is-align-center is-flex-{{ section.settings.icon_position }}" {{ block.shopify_attributes }}>
+        {% else %}
+          <div class="icon-bar__block is-{{ section.settings.size }} is-flex is-align-center is-flex-{{ section.settings.icon_position }}" {{ block.shopify_attributes }}>
+        {% endif %}
+            {% if icon != blank %}
+              {% render 'icon', name: icon %}
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <p class="icon-bar__text {% if section.settings.icon_position == 'column' %} text-align-center {% endif %}">{{ block.settings.text }}</p>
+            {% endif %}
+          {% if block.settings.link %}
+            </a>
+          {% else %}
+            </div>
+          {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}

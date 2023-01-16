@@ -1,0 +1,240 @@
+{% comment %}
+** Footer - classic - static **
+{% endcomment %}
+
+{% assign id = section.id %}
+
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{%- assign locale_selector = false -%}
+{%- assign currency_selector = false -%}
+
+{%- if section.settings.show_currency_selector == true and shop.enabled_currencies.size > 1 -%}
+  {%- assign currency_selector = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_locale_selector == true and shop.published_locales.size > 1 -%}
+  {%- assign locale_selector = true -%}
+{%- endif -%}
+
+{% style %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+<footer class="footer__container {{ css_class }}">
+  {% if product.tags contains 'lp' %}
+    <section class="footer__content
+                    lp-footer
+                    section
+                    is-width-wide
+                    has-background
+                    has-padding-top
+                    has-padding-bottom">
+      <div class="container has-limit is-justify-space-between">
+        <div class="lp-footer-logo-block is-flex is-flex-column one-whole">
+          <img src="{{ 'h-proof-logo.svg' | asset_url }}" class="lp-footer-logo" alt="{{ shop.name }}">
+          <p class="text-lg text-center uppercase bold">The Anytime You Drink Vitamin®</p>
+        </div>
+        <div class="lp-footer-icon-block is-flex one-whole mt-md mb-sm">
+          <div class="container multi-column is-justify-space-between is-align-start">
+        	<div class="col one-third text-align-center">
+        		<div>
+        			<img src="//cdn.shopify.com/s/files/1/0021/3660/4731/files/icon-women-owned_ws.svg" alt="">
+        			<p class="text-xs semibold">Women Owned</p>
+        		</div>
+        	</div>
+        	<div class="col one-third text-align-center">
+        		<div>
+        			<img src="//cdn.shopify.com/s/files/1/0021/3660/4731/files/icon-small-business_ws.svg" alt="">
+        			<p class="text-xs semibold">Small Business</p>
+        		</div>
+        	</div>
+        	<div class="col one-third text-align-center">
+        		<div>
+        			<img src="//cdn.shopify.com/s/files/1/0021/3660/4731/files/icon-usa_ws.svg" alt="">
+        			<p class="text-xs semibold">Made In USA</p>
+        		</div>
+        	</div>
+          </div>
+        </div>
+        <div id="footer-disclaimer" class="disclaimer">
+          <div id="footer-disclaimer-text" {% if template contains 'product' %}class="product-disclaimer"{% endif %} >{% if template contains 'product' %}{{ section.settings.product_disclaimer }}{% else %}{{ section.settings.site_disclaimer }}{% endif %}</div>
+        </div>
+        {% if customer and customer.tags contains 'wholesale' %}
+          {% if section.settings.wholesale_disclaimer != blank %}
+            <div id="wholesale-disclaimer" class="disclaimer is-flex fullwidth is-justify-center mt-md mb-xs">
+              <div class="text-sm text-center uppercase">{{ section.settings.wholesale_disclaimer }}</div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="footer__credits is-flex is-justify-center one-whole column small-down--one-whole mt-xs">
+        <span>
+          <p>&copy; {{ "now" | date: "%Y" }} {% comment %}{{ shop.name | link_to: '/' }}.{% endcomment %}</p>{{ section.settings.copyright_text }}
+        </span>
+        <span>
+          <p><a href="/pages/contact-us" target="_blank" rel="noopener noreferrer">Contact Us</a></p>
+        </span>
+        <span>
+          <p><a href="/pages/terms-conditions" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></p>
+        </span>
+        <span>
+          <p><a href="/pages/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+        </span>
+        </div>
+    </section>
+  {% else %}
+    <section class="footer__content
+                    section
+                    is-width-wide
+                    has-background
+                    has-padding-top
+                    has-padding-bottom">
+      <div class="container has-limit is-justify-space-between">
+        {% for block in section.blocks %}
+          <div id="shopify-section-{{ block.id }}" class="footer__block block__{{ block.id }} block__{{ block.type | downcase | replace: '_', '-' }}
+                      {% render 'column-width', value: section.blocks.size %}
+                      medium-down--one-whole column"
+                      {{ block.shopify_attributes }}>
+            {% if block.type == 'logo' %}
+              {% comment %} Logo and text {% endcomment %}
+              <div>
+                <a href="{{ routes.root_url }}" title="{{ shop.name }}" class="footer__logo-wrapper has-padding-bottom is-{{ block.settings.size }}">
+                  {% if block.settings.logo %}
+                    <img src="{{ 'h-proof-logo.svg' | asset_url }}" alt="{{ shop.name }}">
+                  {% else %}
+                    <h2 class="footer__heading">{{ shop.name }}</h2>
+                  {% endif %}
+                </a>
+                {% if block.settings.text != blank %}
+                  {{ block.settings.text }}
+                {% endif %}
+                {% if block.settings.social_icons_footer %}
+                  <div class="has-padding-bottom has-padding-top">
+                    {% render 'social-icons' %}
+                  </div>
+                {% endif %}
+              </div>
+  
+            {% elsif block.type == 'html' %}
+  
+              {{ block.settings.html_content }}
+  
+            {% elsif block.type == 'link_list' %}
+              {% comment %} Menu {% endcomment %}
+              {% render 'footer__menu', menu_link: block.settings.menu %}
+  
+              {% if block.settings.social_icons_footer %}
+                <div class="has-padding-bottom has-padding-top">
+                  {% render 'social-icons' %}
+                </div>
+              {% endif %}
+  
+            {% elsif block.type == 'text' %}
+              {% comment %} Text {% endcomment %}
+              {% if block.settings.title != blank %}
+                <p class="footer__heading">{{ block.settings.title }}</p>
+              {% endif %}
+              {% if block.settings.content != blank %}
+                {{ block.settings.content }}
+              {% endif %}
+  
+              {% if block.settings.social_icons_footer %}
+                <div class="has-padding-bottom has-padding-top">
+                  {% render 'social-icons' %}
+                </div>
+              {% endif %}
+  
+              {% elsif block.type == 'newsletter' %}
+                {% comment %} Newsletter {% endcomment %}
+                {% if block.settings.newsletter_title != blank %}
+                  <p class="footer__heading">
+                    {{ block.settings.newsletter_title }}
+                  </p>
+                {% endif %}
+  
+                {% if block.settings.newsletter_richtext != blank %}
+                  <div class="content">
+                    {{ block.settings.newsletter_richtext }}
+                  </div>
+                {% endif %}
+  
+                {% render 'newsletter-form',
+                        type: 'block',
+                        display_first_name: block.settings.display_first_name,
+                        display_last_name: block.settings.display_last_name
+                %}
+  
+                {% if block.settings.social_icons_footer %}
+                  <div class="has-padding-bottom has-padding-top">
+                    {% render 'social-icons' %}
+                  </div>
+                {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+        <div id="footer-disclaimer">
+          <div id="footer-disclaimer-text" {% if template contains 'product' %}class="product-disclaimer"{% endif %} >{% if template contains 'product' %}{{ section.settings.product_disclaimer }}{% else %}{{ section.settings.site_disclaimer }}{% endif %}</div>
+        </div>
+        {% if customer and customer.tags contains 'wholesale' %}
+          {% if section.settings.wholesale_disclaimer != blank %}
+            <div id="wholesale-disclaimer" class="is-flex fullwidth is-justify-center mt-md mb-xs">
+              <div class="text-sm text-center uppercase">{{ section.settings.wholesale_disclaimer }}</div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </section>
+    <section class="footer__extra-content section">
+      <div class="container has-padding-top has-padding-bottom">
+        {% if locale_selector or currency_selector or settings.show_multiple_currencies == true %}
+          <div class="one-whole column">
+            <div class="footer-menu__disclosure footer-classic__disclosure">
+              {% render 'localization-switcher',
+                additional_classes: 'footer-menu__disclosure is-hidden-medium is-hidden-mobile-only',
+                id: 'footer__selector-form',
+                currency_selector: currency_selector,
+                locale_selector: locale_selector,
+                show_currency: section.settings.show_currency_selector
+              %}
+              {%
+                render 'localization-switcher-mobile',
+                id: 'footer__selector-form--mobile',
+                additional_classes: 'selectors-form--mobile is-hidden-desktop-only',
+                currency_selector: currency_selector,
+                locale_selector: locale_selector,
+                show_currency: settings.show_currency_selector
+              %}
+            </div>
+          </div>
+        {% endif %}
+  
+        <div class="footer__credits {% if section.settings.display_payment_methods %}one-half {% else %} one-whole {% endif %} column small-down--one-whole">
+          <p>&copy; {{ "now" | date: "%Y" }} {% comment %}{{ shop.name | link_to: '/' }}.{% endcomment %}</p>
+          {{ section.settings.copyright_text }}
+          {% if section.settings.display_designed_by %}
+            <p>{{ 'layout.general.designer_credits_html' | t }}</p>
+          {% endif %}
+          {% if section.settings.display_shopify %}
+            <p>{{ powered_by_link }}</p>
+          {% endif %}
+        </div>
+        {% if section.settings.display_payment_methods %}
+          <div class="footer__payment-methods one-half column small-down--one-whole is-flex is-justify-end">
+            <div class="payment-methods">
+              {% for type in shop.enabled_payment_types %}
+                {{ type | payment_type_svg_tag: class:'payment-icon' }}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+</footer>

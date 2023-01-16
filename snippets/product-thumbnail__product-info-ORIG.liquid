@@ -1,0 +1,47 @@
+<div class="product-thumbnail">
+  {% if settings.display_vendor %}
+    <span class="product-thumbnail__vendor">{{ product.vendor }}</span>
+  {% endif %}
+
+  <a href="{{ product.url | within: collection }}" class="product-thumbnail__title">
+    {{- product.title -}}
+    {% if collection.handle == 'all' %}
+      - {{ variant_title }}
+    {% endif %}
+  </a>
+
+  {% if collection_handles contains 'coming-soon' %}
+    {% if settings.stickers_enabled == false %}
+      {{ 'collections.general.coming_soon' | t }}
+    {% endif %}
+  {% else %}
+    <span class="product-thumbnail__price price {% if product.compare_at_price_max > product.price %}sale{% endif %}">
+      {% if product.available %}
+        {% if product.price_varies and product.price_min > 0 %}
+          <small><em>{{ 'products.general.from' | t }}</em></small>
+        {% endif %}
+        {% if product.price_min > 0 %}
+          <span class="money">
+            {% if product.variants.size >= 2 %}
+            <span class="serving-price">{{ product.selected_or_first_available_variant.price | divided_by: 20 | money_without_trailing_zeros }} <span class="price-servings">{{  settings.per_text }}</span></span>
+          {% else %}
+              {% render 'price-element', price: product.price_min %}
+            {% endif %}
+          </span>
+        {% else %}
+          {{ settings.free_price_text }}
+        {% endif %}
+        {% if product.compare_at_price_max > product.price %}
+          <span class="product-thumbnail__was-price was-price">
+            <span class="money">
+              {{ product.selected_or_first_available_variant.price | divided_by: product.selected_or_first_available_variant.options[0] | money_without_trailing_zeros }}
+              {% comment %}{% render 'price-element', price: product.compare_at_price_max %}{% endcomment %}
+            </span>
+          </span>
+        {% endif %}
+      {% else %}
+        <span class="product-thumbnail__sold-out sold-out">{{ 'products.product.sold_out' | t }}</span>
+      {% endif %}
+    </span>
+  {% endif %}
+</div>

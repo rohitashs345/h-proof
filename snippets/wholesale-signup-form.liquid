@@ -1,0 +1,62 @@
+<div class="wholesale-lp-form mt-sm mb-sm">
+  <div class="register">
+    <div id="customer" class="register__form">
+  
+      <!-- Create Customer -->
+      <div id="create-customer">
+  
+        {% form 'create_customer' %}
+  
+          {{ form.errors | default_errors }}
+
+          <div id="company" class="field">
+            <label class="label" for="{{ label | replace: ' ', '_' }}">Business Name</label>
+            <div class="control">
+              <input type="text" value="" name="customer[note][Business]" id="customer_business_name" class="input" data-backup="company" size="30" placeholder="Name of business" />
+            </div>
+          </div>
+        
+          <div id="first_name" class="field one-half">
+            <label class="label" for="{{ label | replace: ' ', '_' }}">{{ 'customer.register.first_name' | t }}</label>
+            <div class="control">
+              <input type="text" value="" name="customer[first_name]" id="first_name" class="input" size="30" placeholder="{{ 'customer.register.first_name' | t }}" />
+            </div>
+          </div>
+  
+          <div id="last_name" class="field one-half">
+            <label class="label" for="{{ label | replace: ' ', '_' }}">{{ 'customer.register.last_name' | t }}</label>
+            <div class="control">
+              <input type="text" value="" name="customer[last_name]" id="last_name" class="input" size="30" placeholder="{{ 'customer.register.last_name' | t }}" />
+            </div>
+          </div>
+  
+          <div id="email" class="field">
+            <label class="label" for="{{ label | replace: ' ', '_' }}">{{ 'customer.register.email' | t }}*</label>
+            <div class="control">
+              <input type="email" value="" name="customer[email]" id="email" class="input" size="30" placeholder="{{ 'customer.register.email' | t }}" />
+            </div>
+          </div>
+  
+          <div id="password" class="field">
+            <label class="label" for="{{ label | replace: ' ', '_' }}">{{ 'customer.register.password' | t }}*</label>
+            <div class="control">
+              <input type="password" value="" name="customer[password]" id="password" class="input" size="30" placeholder="Create password" />
+            </div>
+          </div>
+  
+          <div class="is-flex is-flex-column">
+            <input class="button button--secondary" type="submit" value="Get Your Free Point of Sale" />
+            <p class="required has-margin-left">* {{ 'general.forms.required_field' | t }}</p>
+          </div>
+          <p class="ws-form-subtext fullwidth text-center semibold mt-sm">Includes 20 packets of The Anytime You Drink Vitamin®<br>MSRP $3.95/packet</p>
+          
+          {% comment %}<p class="ws-form-returning fullwidth text-center text-sm mt-sm">{{ 'customer.register.returning_customer_label' | t }} <a href="{{ routes.account_login_url }}" class="hoverButton">{{ 'customer.register.sign_in_html' | t }}</a></p>{% endcomment %}
+          <input type="hidden" name="customer[tags]" value="wholesale">
+        {% endform %}
+      </div><!-- /#create-customer -->
+    </div>
+  </div>
+</div>
+
+{% comment %}JavaScript{% endcomment %}
+<script src="{{ 'z__jsAccounts.js' | asset_url }}"></script>

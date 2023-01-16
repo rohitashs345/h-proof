@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    <title>{{ page_title }}</title>
+
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}  
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ 'checkout.css' | asset_url }}">
+    
+  </head>
+  <body>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+            <div class="hide-desk">
+              {% unless customer.tags contains 'wholesale' %}
+                {% render 'govx' %}
+              {% endunless %}
+            </div>
+            <div class="hide-desk">
+              {% unless customer.tags contains 'wholesale' %}
+                <div class="sidebar-cart-badges-mobile" style="display:none;">
+                  {% render 'cart-badges' %}
+                </div>
+              {% endunless %}
+            </div>
+          </header>
+          <main class="main__content" role="main" data-wholesale="{% if customer and customer.tags contains 'wholesale' %}true{% else %}false{% endif %}">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+            <div class="hide-mobile">
+              {% unless customer.tags contains 'wholesale' %}
+                {% render 'govx' %}
+              {% endunless %}
+            </div>
+          </div>
+          <div class="hide-mobile">
+            {% unless customer.tags contains 'wholesale' %}
+              <div class="sidebar-cart-badges" style="display:none;">
+                {% render 'cart-badges' %}
+              </div>
+            {% endunless %}
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+  </body>
+</html>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+      var countWholesale = document.getElementsByClassName('reduction-code__text');
+      console.log(countWholesale.length);
+      var textReduction=document.querySelector('.reduction-code__text');
+      if(countWholesale.length < 1 || textReduction.innerHTML.indexOf("WHOLESALE") === -1){
+        if (document.querySelector('.sidebar-cart-badges')) {
+          document.querySelector('.sidebar-cart-badges').style.display = "block";
+        }
+        if (document.querySelector('.sidebar-cart-badges-mobile')) {
+          document.querySelector('.sidebar-cart-badges-mobile').style.display = "block";
+        }
+      }
+    });
+    (function($) {
+      $(document).on("page:load page:change", function() {
+        // Change price of POS product
+        let posProd = document.querySelector('.product[data-product-id="6803988775030"]');
+        if (posProd) {
+          posProd.querySelector('.product__price .order-summary__emphasis').textContent = "$0.00"
+        }
+        // Change company field
+        let customerWholesale = document.querySelector('.main__content').dataset.wholesale;
+        let customerForm = document.querySelector('form[data-customer-information-form]');
+        let companyField = document.querySelector('#checkout_shipping_address_company');
+        if (customerWholesale == 'true') {
+          if(customerForm) {
+            customerForm.removeAttribute('novalidate');
+            companyField.setAttribute('required', true);
+            companyField.setAttribute('placeholder', 'Company*')
+          }          
+        } else {
+          customerForm.setAttribute('novalidate', 'novalidate');
+          companyField.removeAttribute('required');
+          companyField.setAttribute('placeholder', 'Company (Optional)')
+        }
+      });
+    })(Checkout.$);  
+</script>

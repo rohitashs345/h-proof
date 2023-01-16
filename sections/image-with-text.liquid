@@ -1,0 +1,209 @@
+<div class="banner-with-text" {% if section.settings.id %}id="{{ section.settings.id }}"{% endif %}>
+  <div class="container large">
+    {% if section.settings.header != blank %}
+      <div class="banner-with-text__header">
+        <h3 class="heading-md uppercase text-align-center"> {{- section.settings.header -}}</h3>
+      </div>
+    {% endif %}
+    <div class="banner-with-text__wrapper">
+      {% for block in section.blocks %}
+        {% assign image = block.settings.image %}
+        <div class="banner-with-text__item">
+          <div class="banner-with-text__picture">
+            {%
+              render 'image-element',
+              image: image,
+              alt: image.alt,
+              stretch_width: true,
+              additional_classes:
+              hide_mobile
+            %}
+          </div>
+          <div class="banner-with-text__content">
+            <div class="banner-with-text__desc">
+              {{- block.settings.desc -}}
+            </div>
+            <div class="banner-with-text__group">
+              <div class="banner-with-text__icon">
+                {% for icon in (1..block.settings.icon) %}
+                  <i class="banner-with-text__icon-star">⭐️</i>
+                {% endfor %},
+              </div>
+              <div class="banner-with-text__name">
+                {{- block.settings.title -}}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% style %}
+#shopify-section-{{ section.id }} {
+  padding-top: {{ section.settings.pd_top }}px;
+  padding-bottom: {{ section.settings.pd_bottom }}px;
+}
+
+.banner-with-text__header {
+  width: 100%;
+  margin-bottom: 30px;
+}
+.banner-with-text__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.banner-with-text__item {
+  padding: 10px 20px;
+  flex-basis: calc(33.333% - 20px);
+  max-width: calc(33.333% - 20px);
+  position: relative;
+}
+.banner-with-text__picture .image-element__wrap {
+  position: relative;
+  padding-top: 68%;
+}
+.banner-with-text__picture img {
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.banner-with-text__icon i {
+  font-style: normal;
+  font-size: 14px;
+}
+.banner-with-text__content {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  min-height: 135px;
+  max-height: 150px;
+  overflow: auto;
+  width: calc(100% - 40px);
+  padding: 10px 28px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 0 0 10px 10px;
+  text-align: center;
+}
+.banner-with-text__group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  color: #fff;
+}
+.banner-with-text__desc {
+  letter-spacing: 0;
+  font-size: 14px;
+  line-height: 17px;
+  color: #fff;
+}
+.banner-with-text__name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+@media (max-width: 767px) {
+  .banner-with-text__item {
+    max-width: 100%;
+    flex-basis: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .banner-with-text__content {
+    width: 100%;
+  }
+
+  .banner-with-text__item:not(:first-child) {
+    display: none;
+  }
+}
+{% endstyle %}
+
+{% schema %}
+  {
+    "name": "Section Feedback",
+    "max_blocks": 6,
+    "settings": [
+      {
+        "type": "text",
+        "id": "id",
+        "label": "Set id for section"
+      },
+      {
+        "type": "text",
+        "id": "header",
+        "label": "Header"
+      },
+      {
+        "type": "range",
+        "id": "pd_top",
+        "label": "Padding top",
+        "unit": "px",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "pd_bottom",
+        "label": "Padding Bottom",
+        "unit": "px",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Column",
+        "type": "column",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Select Image"
+          },
+          {
+            "type": "richtext",
+            "id": "desc",
+            "label": "Description"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Name"
+          },
+          {
+            "type": "range",
+            "id": "icon",
+            "label": "Icon star",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "default": 5
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Section Feedback"
+      }
+    ]
+  }
+{% endschema %}
+

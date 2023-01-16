@@ -1,0 +1,94 @@
+<style>
+  .product-template .single-option-selector[data-variant-option-chosen-value="Black Cherry"] {
+    background-image: url('{{ section.settings.icon_cherry | img_url: "100x" }}');
+  }
+
+  .product-template .single-option-selector[data-variant-option-chosen-value="Lemonade"] {
+    background-image: url('{{ section.settings.icon_lemonade | img_url: "100x" }}');
+  }
+
+  .product-template .single-option-selector[data-variant-option-chosen-value="Tangerine"] {
+    background-image: url('{{ section.settings.icon_tangerine | img_url: "100x" }}');
+  }
+
+  .product-template .single-option-selector[data-variant-option-chosen-value="Tangerine/Lemonade"],
+  .product-template .single-option-selector[data-variant-option-chosen-value="Tangerine+Lemonade"],
+  .product-template .single-option-selector[data-variant-option-chosen-value="Tangerine + Lemonade"] {
+    background-image: url('{{ section.settings.icon_tangerine-lemonade | img_url: "100x" }}');
+  }
+
+  .product-template .single-option-selector[data-variant-option-chosen-value="Assorted (Black Cherry + Lemonade + Tangerine)"] {
+    background-image: url('{{ section.settings.icon_assorted | img_url: "100x" }}');
+  }
+
+  {% if section.settings.icon_cherry != blank %}
+    .product-template .swatch .black-cherry-swatch label {
+      background-image: url('{{ section.settings.icon_cherry | img_url: "100x" }}');
+      padding-left: 35px;
+    }
+    .product-extended-box .product-template .swatch .black-cherry-swatch label,
+    .product-extended-box-bulk .product-template .swatch .black-cherry-swatch label {
+      padding-left: 15px;
+    }
+  {% endif %}
+
+  {% if section.settings.icon_lemonade != blank %}
+    .product-template .swatch .lemonade-swatch label {
+      background-image: url('{{ section.settings.icon_lemonade | img_url: "100x" }}');
+      padding-left: 35px;
+    }
+  {% endif %}
+
+  {% if section.settings.icon_tangerine != blank %}
+    .product-template .swatch .tangerine-swatch label {
+      background-image: url('{{ section.settings.icon_tangerine | img_url: "100x" }}');
+      padding-left: 35px;
+    }
+  {% endif %}
+
+  {% if section.settings.icon_tangerine-lemonade != blank %}
+    .product-template .swatch .tangerine-lemonade-swatch label {
+      background-image: url('{{ section.settings.icon_tangerine-lemonade | img_url: "100x" }}');
+      padding-left: 35px;
+    }
+  {% endif %}
+
+  {% if section.settings.icon_assorted != blank %}
+    .product-template .swatch .black-cherry-tangerine-lemonade-swatch label {
+      background-image: url('{{ section.settings.icon_assorted | img_url: "100x" }}');
+      background-size: 30px;
+      background-position: left 15px center;
+      padding-left: 25px;
+    }
+  {% endif %}
+
+  @media(min-width: 768px) and (max-width:1079px) {
+    .product-extended-box .swatch .swatch__options[data-variant-option-index="0"] label, 
+    .product-extended-box-bulk .swatch .swatch__options[data-variant-option-index="0"] label {
+      background-position: left 15px center;
+    }
+  }
+  
+  @media(max-width: 767px) {
+    .product-template .swatch .black-cherry-swatch label {
+      padding-left: 30px;
+    }
+
+    .product-template .swatch .lemonade-swatch label {
+      padding-left: 30px;
+    }
+
+    .product-template .swatch .tangerine-swatch label {
+      padding-left: 30px;
+    }
+
+    .product-template .swatch .tangerine-lemonade-swatch label {
+      padding-left: 30px;
+    }
+
+    .product-extended-box .product-template .swatch .black-cherry-swatch label,
+    .product-extended-box-bulk .product-template .swatch .black-cherry-swatch label {
+      padding-left: 15px;
+    }
+  }
+</style>

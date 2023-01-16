@@ -1,0 +1,140 @@
+{% comment %}
+** Footer - centered - static **
+{% endcomment %}
+
+{% assign id = section.id %}
+
+{% comment %} Advanced {% endcomment %}
+{% assign css_class = section.settings.css_class %}
+{% assign custom_css = section.settings.custom_css %}
+
+{%- assign locale_selector = false -%}
+{%- assign currency_selector = false -%}
+
+{%- if section.settings.show_currency_selector == true and shop.enabled_currencies.size > 1 -%}
+  {%- assign currency_selector = true -%}
+{%- endif -%}
+
+{%- if section.settings.show_locale_selector == true and shop.published_locales.size > 1 -%}
+  {%- assign locale_selector = true -%}
+{%- endif -%}
+
+{% style %}
+  {% render 'css-loop',
+          css: custom_css,
+          id: id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+<footer class="footer__container {{ css_class }}">
+  <section class="footer__content
+                  section
+                  is-width-wide
+                  has-background
+                  has-padding-top
+                  has-padding-bottom">
+    <div class="container is-flex-column is-align-center has-limit">
+      {% for block in section.blocks %}
+        <div id="shopify-section-{{ block.id }}" class=" footer__block block__{{ block.id }} block__{{ block.type | downcase | replace: '_', '-' }}
+                    has-padding-bottom
+                    text-align-center"
+                    {{ block.shopify_attributes }}>
+          {% if block.type == 'logo' %}
+            {% comment %} Logo {% endcomment %}
+            <a class="footer__logo-wrapper is-{{ block.settings.size }}" href="{{ routes.root_url }}" title="{{ shop.name }}">
+              {% if block.settings.logo %}
+                  {% render 'image-element',
+                          image: block.settings.logo,
+                          alt: block.settings.logo.alt,
+                          additional_classes: 'footer__logo'
+                  %}
+              {% else %}
+                <h2 class="footer__heading text-align-center">{{ shop.name }}</h2>
+              {% endif %}
+            </a>
+          {% elsif block.type == 'link_list' %}
+            {% comment %} Menu {% endcomment %}
+            {% render 'footer__menu', menu_link: block.settings.menu %}
+
+          {% elsif block.type == 'newsletter' %}
+            {% comment %} Newsletter {% endcomment %}
+            {% if block.settings.newsletter_title != blank %}
+              <h3 class="footer__heading">
+                {{ block.settings.newsletter_title }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.newsletter_richtext != blank %}
+              <div class="content">
+                {{ block.settings.newsletter_richtext }}
+              </div>
+            {% endif %}
+
+            {% render 'newsletter-form',
+                    type: 'block',
+                    display_first_name: block.settings.display_first_name,
+                    display_last_name: block.settings.display_last_name
+            %}
+          {% elsif block.type == 'html' %}
+
+            {{ block.settings.html_content }}
+
+          {% elsif block.type == 'text' %}
+            {% comment %} Text {% endcomment %}
+              <h3 class="footer__heading">{{ block.settings.title }}</h3>
+              {{ block.settings.content }}
+
+          {% elsif block.type == 'social' %}
+            {% comment %} Social {% endcomment %}
+            {% render 'social-icons' %}
+
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="footer__extra-content section">
+    <div class="container has-limit text-align-center has-padding-top has-padding-bottom">
+      {% if locale_selector or currency_selector or settings.show_multiple_currencies == true %}
+        <div class="footer-menu__disclosure footer-centered__disclosure">
+          {% render 'localization-switcher',
+            additional_classes: 'footer-menu__disclosure is-hidden-medium is-hidden-mobile-only',
+            id: 'footer__selector-form',
+            currency_selector: currency_selector,
+            locale_selector: locale_selector,
+            show_currency: section.settings.show_currency_selector
+          %}
+          {%
+            render 'localization-switcher-mobile',
+            id: 'footer__selector-form--mobile',
+            additional_classes: 'selectors-form--mobile is-hidden-desktop-only',
+            currency_selector: currency_selector,
+            locale_selector: locale_selector,
+            show_currency: settings.show_currency_selector
+          %}
+        </div>
+      {% endif %}
+
+      <div class="footer__credits one-whole column">
+        <p>&copy; {{ "now" | date: "%Y" }} {{ shop.name | link_to: '/' }}.</p>
+        {{ section.settings.copyright_text }}
+        {% if section.settings.display_designed_by %}
+          <p>{{ 'layout.general.designer_credits_html' | t }}</p>
+        {% endif %}
+        {% if section.settings.display_shopify %}
+          <p>{{ powered_by_link }}</p>
+        {% endif %}
+      </div>
+
+      {% if section.settings.display_payment_methods %}
+        <div class="footer__payment-methods payment-methods one-whole column">
+          {% for type in shop.enabled_payment_types %}
+            {{ type | payment_type_svg_tag: class:'payment-icon' }}
+          {% endfor %}
+        </div>
+      {% endif %}
+      </div>
+    </div>
+  </section>
+</footer>

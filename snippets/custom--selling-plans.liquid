@@ -1,0 +1,283 @@
+{% if product.selling_plan_groups.size > 0 %}
+  <div class="product-sell-options-wrap">
+    <legend class="option-title__label"> Subscribe & Save </legend>
+    {% if product.selling_plan_groups.size > 0 %}
+      {%- liquid
+       assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+  
+       if current_selling_plan_allocation == nil and current_variant.requires_selling_plan
+        assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+       endif
+  
+       assign offer = current_selling_plan_allocation | default: current_variant
+      -%}
+  
+      <div class="selling-plan-fieldset">
+        {% unless product.requires_selling_plan %}
+          <div class="selling-plan-wrap active onetime-wrap" data-sell="onetime">
+            <div class="selling-plan-block js-selling-plan-block" data-sell="onetime">
+              <div class="selling-plan-title">
+              <span class="selling-plan-icon">{% render 'purchase-one-time-inactive' %}</span>
+                One-time purchase
+              </div>
+            </div>
+          </div>
+        {% endunless %}
+  
+        {% assign group = product.selling_plan_groups[0] %}
+        <div class="selling-plan-wrap subscription-wrap" data-sell="subscription">
+          <div class="selling-plan-block js-selling-plan-block" data-sell="subscription">
+            <div class="selling-plan-title">
+              <span class="selling-plan-icon">{% render 'purchase-recurring-inactive' %}</span>
+              Subscribe & Save {{ group.selling_plans[0].price_adjustments[0].value }}{{ group.selling_plans[0].price_adjustments[0].value_type | replace: 'percentage', '%' }}
+            </div>
+          </div>
+        </div>
+        <div class="switch-selection"></div>
+      </div>
+  
+      <div class="selling-plan-price__wrapper">
+        {% unless product.requires_selling_plan %}
+          <div class="selling-plan-price selling-plan-price__onetime">
+            <span class="js-variant-total">
+              {{ current_variant.price | money }}
+            </span>
+            <p class="js-serving-price">
+              ({{ current_variant.price | divided_by: 20 | money }} / serving)
+            </p>
+          </div>
+        {% endunless %}
+        <div class="selling-plan-price">
+          {% if group.selling_plans[0].price_adjustments[0].value_type == 'percentage' %}
+            {% assign sale_price = current_variant.price | times: group.selling_plans[0].price_adjustments[0].value | divided_by: 100 %}
+            {% assign regular_price = current_variant.price | minus: sale_price %}
+              <span class="js-subs-total" data-sale="{{ group.selling_plans[0].price_adjustments[0].value }}">
+                {{ regular_price | money }}
+              </span>
+  
+              <p class="js-price-autodeliver" data-sale="{{ group.selling_plans[0].price_adjustments[0].value }}">
+                ({{ regular_price | divided_by: 20 | money }} / serving)
+              </p>
+          {% endif %}
+          <select name="" class="js-selling-plan-id">
+            {% for selling_plan in group.selling_plans %}
+              {% assign selling_name = selling_plan.name | replace: 'Delivery every ', ''  %}
+              <option value="{{ selling_plan.id }}">
+                {{ selling_name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<style>
+  body:not(.open-cart-bar) .selling-plan-fieldset {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f2f2f2;
+    border-radius: 22px;
+    position: relative;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-wrap {
+    flex-basis: 50%;
+    max-width: 50%;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 1;
+    font-size: 14px;
+    background-color: transparent !important;
+    border: 0 !important;
+    position: relative;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-block {
+    justify-content: center;
+    padding: 0 !important;
+  }
+  body:not(.open-cart-bar) .selling-plan-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-icon {
+    min-width: 10px;
+    margin-right: 5px;
+  }
+
+  .selling-plan-block {
+    flex-direction: column;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-title {
+    width: 100%;
+    text-align: center;
+    /* background-color: #f2f2f2;
+    margin-bottom: 5px; */
+    padding: 6px 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* body:not(.open-cart-bar) .onetime-wrap .selling-plan-title {
+    border-radius: 15px 0 0 15px;
+  }
+
+  body:not(.open-cart-bar) .subscription-wrap .selling-plan-title {
+    border-radius: 0 15px 15px 0;
+  } */
+
+  body:not(.open-cart-bar) .selling-plan-wrap.active .selling-plan-title {
+    /* background-color: #fff;
+    border-radius: 15px;
+    box-shadow: inset 0 0 0 1px #1ae7bd;
+    position: relative;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease; */
+    color: #000;
+  }
+
+  /* body:not(.open-cart-bar) .selling-plan-wrap.active .selling-plan-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f2f2f2;
+    z-index: -1;
+  }
+
+  body:not(.open-cart-bar) .subscription-wrap.active .selling-plan-title::before {
+    border-radius: 0 15px 15px 0;
+  }
+
+  body:not(.open-cart-bar) .onetime-wrap.active .selling-plan-title::before {
+    border-radius: 15px 0 0 15px;
+  } */
+
+  body:not(.open-cart-bar) .selling-plan-subs-info {
+    padding: 0;
+    text-align: center;
+    margin-top: 7px;
+  }
+
+  .selling-plan-price .js-variant-total, .selling-plan-price .js-subs-total {
+    font-size: 20px;
+  }
+
+  .selling-plan-price {
+    color: #000;
+  }
+
+  .onetime-wrap .js-serving-price {
+    color: #707070;
+    font-weight: 400;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-title {
+    color: #707070;
+  }
+
+  .selling-plan-price__wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 5px;
+  }
+  .selling-plan-price__wrapper .selling-plan-price {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+
+  .js-selling-plan-id {
+    display: none;
+  }
+
+  .product-sell-options-wrap[data-option="subscription"] .js-selling-plan-id {
+    display: block;
+    width: 135px;
+    color: #31302c !important;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 12px auto 0;
+  }
+
+  .three-step-form select.js-selling-plan-id {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.5em;
+  }
+
+  .switch-selection {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 22px;
+    box-shadow: inset 0 0 0 1px #1ae7bd;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+
+  .product-sell-options-wrap[data-option="subscription"] .switch-selection {
+    left: 50%;
+  }
+
+  .product-sell-options-wrap[data-option="onetime"] .switch-selection {
+    left: 0;
+  }
+
+  .selling-plan-price__onetime .js-serving-price {
+    color: #707070;
+    font-weight: 400;
+  }
+
+  body:not(.open-cart-bar) .selling-plan-block {
+    min-height: 44px;
+  }
+
+  @media (max-width: 767px) {
+    body:not(.open-cart-bar) .selling-plan-block {
+      min-height: 35px;
+    }
+
+    .selling-plan-price .js-variant-total, .selling-plan-price .js-subs-total {
+      font-size: 16px;
+    }
+
+    .selling-plan-price .js-serving-price, .selling-plan-price .js-price-autodeliver {
+      font-size: 11px;
+    }
+
+    body:not(.open-cart-bar) .selling-plan-title {
+      padding: 6px 7px;
+    }
+
+    body:not(.open-cart-bar) .selling-plan-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    const activeName = $('.selling-plan-wrap.active').data('sell');;
+    $('.product-sell-options-wrap').attr('data-option', activeName);
+
+    $('body').on('click', '.selling-plan-wrap', function() {
+      const name = $(this).data('sell');
+      $('.product-sell-options-wrap').attr('data-option', name);
+    });
+  })
+</script>

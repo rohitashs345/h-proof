@@ -1,0 +1,161 @@
+{% comment %} Content setttings {% endcomment %}
+{%- assign blocks = section.blocks -%}
+{% comment %} End content settings {% endcomment %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{%- assign text_alpha = section.settings.text_color | color_extract: 'alpha' -%}
+{%- assign background_alpha = section.settings.background | color_extract: 'alpha' -%}
+{%- assign gradient_alpha = section.settings.gradient | color_extract: 'alpha' -%}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+
+  .icon-with-text-column__column {
+    background-image: linear-gradient({{ section.settings.gradient_rotation }}deg, rgba(255,255,255,0), {{ section.settings.gradient }});
+    background-color: {%- if background_alpha != 0 -%}{{ section.settings.background }}{%- endif -%};
+  }
+
+  .icon-column__title {
+    color: {%- if text_alpha != 0 -%}{{ section.settings.text_color }}{%- endif -%};
+  }
+
+  .icon-column__text {
+    color: {%- if text_alpha != 0 -%}{{ section.settings.text_color }}{%- endif -%};
+  }
+
+{%- endcapture -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: {{ section.settings.padding_left }}px;
+    padding-right: {{ section.settings.padding_right }}px;
+    {% if section.settings.width == 'wide' %}
+      width: 100%;
+    {% elsif section.settings.width == 'half' %}
+      width: 50%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: section.id
+  %}
+  {% render 'css-loop',
+          css: section.settings.custom_css,
+          id: section.id
+  %}
+{% endstyle %}
+
+<section class="section
+                {{ section.settings.css_class }}
+                is-width-{{ section.settings.width }}
+                {% if section.settings.show_gutter == false %}
+                  has-no-side-gutter
+                  has-background
+                {% else %}
+                  has-gutter-enabled
+                {% endif %}
+                {% if blocks.size > section.settings.icons_per_row %}
+                  has-multirow-blocks
+                {% endif %}
+                {% if section.settings.width == 'wide' %}
+                  equal-columns--outside-trim
+                {% endif %}"
+                {% if section.settings.animation != "none" %}
+                  data-scroll-class="{{ section.settings.animation }}"
+                {% endif %}>
+  <div class="heading-block">
+    <div class="heading-block-inner 
+                {% if section.settings.limit_title_width %}
+                three-fifths
+                {% endif %}">
+
+      {% if section.settings.title != blank or section.settings.html_heading != blank %}
+        <h2 class="heading-block__heading title text-align-center ">
+          {% if section.settings.html_heading != blank %}
+            {{ section.settings.html_heading }}
+          {% else %}
+            <span>{{ section.settings.title }}</span>
+          {% endif %}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.text != blank or section.settings.html_content != blank %}
+        <div class="heading-block__text text-align-center content">
+          {% if section.settings.html_content != blank %}
+            {{ section.settings.html_content }}
+          {% else %}
+            {{ section.settings.text }}
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <div class="buttons is-{{ section.settings.button_alignment }}">
+          {% render 'button',
+                  label: section.settings.button_label,
+                  href: section.settings.button_link,
+                  style: section.settings.button_style,
+                  type: "link"
+          %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="container is-justify-center">
+    {% for block in blocks %}
+
+      {% comment %} Content settings {% endcomment %}
+      {%- assign text = block.settings.text -%}
+      {% comment %} End content settings {% endcomment %}
+
+      <div class="icon-with-text-column__column
+                  {% if section.settings.show_gutter %}
+                    has-gutter
+                  {% endif %}
+                  column
+                  has-padding
+                  {% render 'column-width', value: section.settings.icons_per_row %}
+                  text-align-{{ section.settings.align_text }}
+                  medium-down--one-whole">
+
+        {% if block.settings.image != blank or block.settings.image_svg != blank %}
+          <div class="icon-column__image">
+            {% if block.settings.image_svg != blank %}
+              <div class="icon-column__svg">
+                <img src="{{ block.settings.image_svg }}">
+              </div>
+            {% elsif block.settings.image != blank %}
+              {% render 'image-element',
+                  image: block.settings.image,
+                  additional_classes: 'icon-column__image'
+              %}
+            {% else %}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if block.settings.title != blank or text != blank %}
+          <div class="icon-column__text ">
+            <h3 class="icon-column__title title">{{ block.settings.title }}</h3>
+            {{ text }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.button_label != blank %}
+          <div class="icon-column__action has-padding-top">
+            {% render 'button',
+                    label: block.settings.button_label,
+                    href: block.settings.link,
+                    style: section.settings.button_style,
+                    type: "link"
+            %}
+          </div>
+        {% endif %}
+
+      </div>
+    {% endfor %}
+  </div>
+</section>

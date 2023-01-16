@@ -1,0 +1,94 @@
+<div class="product-sell-options-wrap">
+  {% if product.selling_plan_groups.size > 0 %}
+    {%- liquid
+     assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+
+     if current_selling_plan_allocation == nil and current_variant.requires_selling_plan
+      assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+     endif
+
+     assign offer = current_selling_plan_allocation | default: current_variant
+    -%}
+
+    <div class="selling-plan-fieldset">
+      {% unless product.requires_selling_plan %}
+        <div class="selling-plan-wrap active onetime-wrap" data-sell="onetime">
+          <div class="selling-plan-block js-selling-plan-block" data-sell="onetime">
+            <div class="selling-plan-title">
+              <span class="selling-plan-icon">{% render 'purchase-one-time-inactive' %}</span>
+              One-time purchase
+            </div>
+            <div class="selling-plan-price">
+              <span class="js-variant-total">
+                {{ current_variant.price | money }}
+              </span>
+              <p class="js-serving-price">
+                ({{ current_variant.price | divided_by: 20 | money }} / serving)
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endunless %}
+
+      {% assign group = product.selling_plan_groups[0] %}
+      <div class="selling-plan-wrap subscription-wrap" data-sell="subscription">
+        <div class="selling-plan-block js-selling-plan-block" data-sell="subscription">
+          <div class="selling-plan-title">
+            <span class="selling-plan-icon">{% render 'purchase-recurring-inactive' %}</span>
+            Subscribe & Save {{ group.selling_plans[0].price_adjustments[0].value }}{{ group.selling_plans[0].price_adjustments[0].value_type | replace: 'percentage', '%' }}
+          </div>
+
+          {% if group.selling_plans[0].price_adjustments[0].value_type == 'percentage' %}
+            {% assign sale_price = current_variant.price | times: group.selling_plans[0].price_adjustments[0].value | divided_by: 100 %}
+            {% assign regular_price = current_variant.price | minus: sale_price %}
+            <div class="selling-plan-price">
+              <span class="js-subs-total" data-sale="{{ group.selling_plans[0].price_adjustments[0].value }}">
+                {{ regular_price | money }}
+              </span>
+
+              <p class="js-price-autodeliver" data-sale="{{ group.selling_plans[0].price_adjustments[0].value }}">
+                ({{ regular_price | divided_by: 20 | money }} / serving)
+              </p>
+            </div>
+          {% endif %}
+        </div>
+       
+
+        <div class="selling-plan-subs-info">
+          <select name="" class="js-selling-plan-id">
+            {% for selling_plan in group.selling_plans %}
+              {% assign selling_name = selling_plan.name | replace: 'Delivery every ', ''  %}
+              <option value="{{ selling_plan.id }}">
+                {{ selling_name }}
+              </option>
+            {% endfor %}
+          </select>
+
+          <div class="subs-benefit">
+            <div class="subs-benefit-left">
+              <p>
+                {% render 'icon-checked' %}
+                <span>Save 15%</span>
+              </p>
+              <p>
+                {% render 'icon-checked' %}
+                <span>Never run out</span>
+              </p>
+            </div>
+            <div class="subs-benefit-right">
+              <p>
+                {% render 'icon-checked' %}
+                <span>Skip or move a delivery</span>
+              </p>
+              <p>
+                {% render 'icon-checked' %}
+                <span>No obligation, cancel anytime</span>
+              </p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

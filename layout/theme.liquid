@@ -1,0 +1,634 @@
+{% capture content %}
+<!doctype html>
+<html class="no-js no-touch {% if customer and customer.tags contains 'wholesale' %}wholesale-customer{% endif %}" 
+  lang="{{ shop.locale }}"
+>
+<head>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NB3MN5Q');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Retention.com Collection Script -->
+<script type="text/javascript">
+!function(){var geq=window.geq=window.geq||[];if(geq.initialize) return;if (geq.invoked){if (window.console && console.error) {console.error("GE snippet included twice.");}return;}geq.invoked = true;geq.methods = ["page", "suppress", "trackOrder", "identify", "addToCart", "callBack", "event"];geq.factory = function(method){return function(){var args = Array.prototype.slice.call(arguments);args.unshift(method);geq.push(args);return geq;};};for (var i = 0; i < geq.methods.length; i++) {var key = geq.methods[i];geq[key] = geq.factory(key);}geq.load = function(key){var script = document.createElement("script");script.type = "text/javascript";script.async = true;if (location.href.includes("vge=true")) {script.src = "https://s3-us-west-2.amazonaws.com/jsstore/a/" + key + "/ge.js?v=" + Math.random();} else {script.src = "https://s3-us-west-2.amazonaws.com/jsstore/a/" + key + "/ge.js";}var first = document.getElementsByTagName("script")[0];first.parentNode.insertBefore(script, first);};geq.SNIPPET_VERSION = "1.6.1";
+geq.load("Y2QHKM7");}();
+</script>
+<script>geq.page()</script>
+<!-- End Retention.com Collection Script -->
+
+{%- comment -%} <script>
+
+if (e.detail.type == 'submit') {
+
+geq.suppress();
+
+}
+
+});
+
+</script> {%- endcomment -%}
+
+
+  
+<script>
+/* >> TriplePixel :: start*/
+~function(W,H,A,L,E){try{A.setItem(H,1+(0|A.getItem(H)||0)),W.includes("⇈")&&A.setItem(H+"Stg",1+(0|A.getItem(H+"Stg")||0))}catch(e){}function O(T,R){void 0===R&&(R=!1),H=new XMLHttpRequest,H.open("GET","//triplewhale-pixel.web.app/triplepx.txt?"+~(Date.now()/9e7),!0),H.send(null),H.onreadystatechange=function(){4===H.readyState&&200===H.status?setTimeout(function(){return eval(H.responseText)},50):(299<H.status||H.status<200)&&T&&!R&&(R=!0,O(T-1))}}A=window,A[H]||(L=function(){return"tp.."+Date.now().toString(36)+Math.random().toString(36)},E=A[H]=function(t,e,n){return W=L(),(E._q=E._q||[]).push([W,e,n]),W},E.ch=W,O(5))}("","TriplePixel",localStorage);
+/* << TriplePixel :: end*/
+</script>
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="cleartype" content="on">
+{% comment %}<meta name="robots" content="index,follow">{% endcomment %}
+  <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="{{ settings.shop_bg_color }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+{% comment %}SHOW / HIDE ON SERPS{% endcomment %}
+{% comment %}HIDE{% endcomment %}
+  {% if product.tags contains 'test' 
+    or product.tags contains 'dev'
+    or product.tags contains 'wholesale' 
+    or product.tags contains 'hidden' 
+    or product.tags contains 'wholesale-prospect'
+    or product.tags contains 'lp'
+    or page.handle contains 'press-panel' 
+    or page.handle contains 'three-steps-blocks' 
+    or page.handle contains 'ccpa' 
+    or page.handle contains 'intro-panel' 
+    or page.handle contains 'guarantee-panel' 
+    or template.directory == 'customers' 
+  %}
+    <meta name="robots" content="noindex,nofollow">
+  {% else %}
+  {% comment %}SHOW{% endcomment %}
+    <meta name="robots" content="index,follow">
+  {% endif %}
+{% comment %}SHOW / HIDE ON SERPS END{% endcomment %}
+  
+  {%- if current_tags -%}{%- assign meta_tags = current_tags | join: ', ' -%}{%- endif -%}
+  <title>{%- if template.name == "index" -%}{{ page_title }}{%- else -%}{{ page_title }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags }}{%- endif -%}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}{% endif %}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}{% endif %}</title>
+
+  <!-- DNS prefetches -->
+  <link rel="dns-prefetch" href="https://cdn.shopify.com">
+  <link rel="dns-prefetch" href="https://fonts.shopify.com">
+  <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+  <link rel="dns-prefetch" href="https://ajax.googleapis.com">
+
+  {% if settings.enable_shopify_review_comments %}
+    <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+  {% endif %}
+
+  <!-- Preconnects -->
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://monorail-edge.shopifysvc.com">
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+
+  {% if settings.enable_shopify_review_comments %}
+    <link rel="preconnect" href="https://productreviews.shopifycdn.com">
+  {% endif %}
+
+  <!-- Preloads -->
+  <!-- Preload CSS -->
+  <link rel="preload" href="{{ 'fancybox.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'styles.css' | asset_url }}" as="style">
+
+  <!-- Preload JS -->
+  <link rel="preload" href="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" as="script">
+  <link rel="preload" href="{{ 'vendors.js' | asset_url }}" as="script">
+  <link rel="preload" href="{{ 'utilities.js' | asset_url }}" as="script">
+  <link rel="preload" href="{{ 'app.js' | asset_url }}" as="script">
+
+  {% if settings.show_multiple_currencies or shop.enabled_currencies.size > 1 %}
+    <link rel="preload" href="/services/javascripts/currencies.js" as="script">
+    <link rel="preload" href="{{ 'currencyConversion.js' | asset_url }}" as="script">
+  {% endif %}
+
+  {% if settings.enable_shipping_calculator and template.name == 'cart' %}
+    <link rel="preload" href="{{ 'shopify_common.js' | shopify_asset_url }}" as="script">
+    <link rel="preload" href="{{ 'api.jquery.js' | shopify_asset_url }}" as="script">
+    <link rel="preload" href="{{ 'countries.js' | shopify_asset_url }}" as="script">
+  {% endif %}
+
+  {%- if template.directory == 'customers' -%}
+  <link rel="preload" href="{{ 'shopify_common.js' | shopify_asset_url }}" as="script">
+  <link rel="preload" href="{{ 'customer_area.js' | shopify_asset_url }}" as="script">
+  {%- endif -%}
+
+  {% if settings.disqus_enabled %}
+    {% if template.name == "blog" or template.name == "article" or template.name == "index" %}
+      <link rel="preload" href="//{{ settings.disqus_shortname }}.disqus.com/count.js" as="script">
+    {% endif %}
+  {% endif %}
+
+  <!-- CSS for Flex -->
+  <link rel="stylesheet" href="{{ 'fancybox.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'styles.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'custom-style.css' | asset_url }}">
+
+  {% comment %}Inject theme-object begin{% endcomment %}
+  <script>
+    window.Theme = window.Theme || {};
+    window.Theme.version = '3.0.0';
+    window.Theme.name = 'Flex';
+  </script>
+  {% comment %}Inject theme-object end{% endcomment %}
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+  <script src="{{ 'vendors.js' | asset_url }}" defer></script>
+  <script src="{{ 'utilities.js' | asset_url }}" defer></script>
+  <script src="{{ 'app.js' | asset_url }}" defer></script>
+  <script src="{{ 'custom-global.js' | asset_url }}" defer></script>
+
+  {%- if settings.show_multiple_currencies or shop.enabled_currencies.size > 1 -%}
+    <script type="text/javascript" src="/services/javascripts/currencies.js"></script>
+    <script src="{{ 'currencyConversion.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
+  <script>
+    {% render 'js-variables' %}
+  </script>
+
+  {%- if settings.enable_shipping_calculator and template.name == "cart" -%}
+    <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+    <script src="{{ 'api.jquery.js' | shopify_asset_url }}" defer></script>
+    <script src="{{ 'countries.js' | shopify_asset_url }}" defer></script>
+  {%- endif -%}
+
+  {%- if template.directory == 'customers' -%}
+    <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+    <script src="{{ 'customer_area.js' | shopify_asset_url }}" defer></script>
+  {%- endif -%}
+
+  {% if settings.disqus_enabled %}
+    {% if template.name == "blog" or template.name == "article" or template.name == "index" %}
+      <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
+    {% endif %}
+  {% endif %}
+
+  <noscript>
+    <style>
+      /* Insert styles for styles when JS is not loaded */
+
+      .noscript {
+        display: block;
+      }
+
+    </style>
+  </noscript>
+  <script>
+    document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'js');
+    if(window.Shopify&&window.Shopify.designMode)document.documentElement.className+=' in-theme-editor';
+    if(('ontouchstart' in window)||window.DocumentTouch&&document instanceof DocumentTouch)document.documentElement.className=document.documentElement.className.replace(/\bno-touch\b/,'has-touch');
+  </script>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}{% if current_tags %} {{ 'general.meta.tagged_html' | t: tags: meta_tags | escape }}.{% endif %}{% if current_page != 1 %} {{ 'general.meta.page' | t: page_number: current_page }}.{% endif %}" />
+  {%- endif -%}
+
+  {%- if settings.favicon != nil -%}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ settings.favicon | img_url: '180x180' }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | img_url: '180x180' }}"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ settings.favicon | img_url: '57x57' }}"/>
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ settings.favicon | img_url: '60x60' }}"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ settings.favicon | img_url: '72x72' }}"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ settings.favicon | img_url: '76x76' }}"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ settings.favicon | img_url: '114x114' }}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | img_url: '180x180' }}"/>
+    <link rel="apple-touch-icon" sizes="228x228" href="{{ settings.favicon | img_url: '228x228' }}"/>
+  {%- else -%}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">
+  {%- endif -%}
+
+  {{ content_for_header }}
+  {% comment %}{%- render 'bold-common' -%}{% endcomment %}
+
+  {% render 'social-meta-info' %}
+  {% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
+  {% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
+
+  {% if template.name == 'customers' %}
+    {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+    {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+  {% endif %}
+  
+  <meta name="google-site-verification" content="ZT60XsROGyGYg4WyDNk_6X5Y5F4nRSg6ILyLRLZbgzM" />
+  
+  <!-- Global site tag (gtag.js) - Google Ads: 749725333 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-749725333"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-749725333');
+  </script>
+  
+  <!-- Yahoo! Base Script -->
+  <script type="application/javascript">(function(w,d,t,r,u){w[u]=w[u]||[];w[u].push({'projectId':'10000','properties':{'pixelId':'10168604','userEmail': '<email_address>'}});var s=d.createElement(t);s.src=r;s.async=true;s.onload=s.onreadystatechange=function(){var y,rs=this.readyState,c=w[u];if(rs&&rs!="complete"&&rs!="loaded"){return}try{y=YAHOO.ywa.I13N.fireBeacon;w[u]=[];w[u].push=function(p){y([p])};y(c)}catch(e){}};var scr=d.getElementsByTagName(t)[0],par=scr.parentNode;par.insertBefore(s,scr)})(window,document,"script","https://s.yimg.com/wi/ytc.js","dotq");</script>
+  
+  <!-- Reddit Pixel -->
+  <script>
+  !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_o96sqs2f', {"optOut":false,"useDecimalCurrencyValues":true,"aaid":"<AAID-HERE>","email":"<EMAIL-HERE>","externalId":"<EXTERNAL-ID-HERE>","idfa":"<IDFA-HERE>"});rdt('track', 'PageVisit');
+  </script>
+  <!-- DO NOT MODIFY UNLESS TO REPLACE A USER IDENTIFIER -->
+  <!-- End Reddit Pixel -->
+
+  {% render 'analyzify-product-datalayer.liquid' %}
+  
+</head>
+    
+{%- comment -%} <script>
+  let itemKeyArr = `{{ itemKeyArr }}`;
+  let removeItems = itemKeyArr.split('/').filter(item => item != '');
+  
+  if (removeItems.length > 0) {
+    let updateObj = {};
+    removeItems.forEach(item => {
+      updateObj[item] = 0;
+    })
+    fetch(window.Shopify.routes.root + 'cart/update.js', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({updates: updateObj})
+      }          
+    )
+    .then(response => response.json())
+    .then(cart => {
+      if (cart.item_count > 0) {
+        document.querySelector('.header-cart__count[data-bind=itemCount]').textContent = cart.item_count;
+      } else {
+        document.querySelector('.header-cart[data-ajax-cart-trigger]').classList.remove('has-cart-count');
+        document.querySelector('.header-cart__count[data-bind=itemCount]').textContent = cart.item_count;
+      }
+    })
+  }
+</script>     {%- endcomment -%}
+
+{%- capture money_format_output -%}
+  {%- if settings.currency_format == 'money_with_currency_format' -%}
+    {{- shop.money_with_currency_format | strip_html -}}
+  {%- else -%}
+    {{- shop.money_format | strip_html -}}
+  {%- endif -%}
+{%- endcapture -%}
+<body
+  class="
+    {%- if template.name == '404' -%}
+      error-404
+    {% else -%}
+      {{ template | replace: '.', '-' | handle }}
+    {%- endif -%}
+    {% if settings.header_layout == 'vertical' -%}
+      has-vertical-header
+    {%- endif -%}
+    {% if customer and customer.tags contains 'wholesale' %}
+      wholesale-site
+    {% endif %}
+    {% if product.tags contains 'wholesale' %}
+      wholesale-product
+    {% endif %}
+  "
+  data-money-format="{{ money_format_output }}"
+  data-shop-url="{{ shop.url }}"
+  data-current-lang="{{ request.locale.iso_code }}"
+>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NB3MN5Q"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  
+  {% comment %}Inject css-variables begin{% endcomment %}
+  {% style %}
+    :root {
+      --color-body-text: {{ settings.regular_color }};
+      --color-body: {{ settings.shop_bg_color }};
+      --color-bg: {{ settings.shop_bg_color }};
+    }
+  {% endstyle %}
+  {% comment %}Inject css-variables end{% endcomment %}
+
+  {% comment %}Inject @pixelunion/shopify-price-ui/price-ui-globals begin{% endcomment %}
+  {%- capture price -%}{%- render 'price-ui-templates', template: 'price' -%}{%- endcapture -%}
+  {%- capture price_percent -%}{%- render 'price-ui-templates', template: 'price-percent' -%}{%- endcapture -%}
+  {%- capture price_min -%}{%- render 'price-ui-templates', template: 'price-min' -%}{%- endcapture -%}
+  {%- capture price_max -%}{%- render 'price-ui-templates', template: 'price-max' -%}{%- endcapture -%}
+  {%- capture unit_quantity -%}{%- render 'price-ui-templates', template: 'unit-quantity' -%}{%- endcapture -%}
+  {%- capture unit_price -%}{%- render 'price-ui-templates', template: 'unit-price' -%}{%- endcapture -%}
+  {%- capture unit_measurement -%}{%- render 'price-ui-templates', template: 'unit-measurement' -%}{%- endcapture -%}
+  
+  <template id="price-ui">{%- render 'price-ui-templates', template: 'price-ui' -%}</template>
+  <template id="price-ui-badge">{%- render 'price-ui-templates', template: 'price-ui-badge' -%}</template>
+  
+  <template id="price-ui__price">{{ price }}</template>
+  <template id="price-ui__price-range">{{- 'product.price.range_html' | t: price_min: price_min, price_max: price_max -}}</template>
+  <template id="price-ui__unit-pricing">{{- 'product.price.unit_pricing_html' | t: unit_quantity: unit_quantity, unit_price: unit_price, unit_measurement: unit_measurement -}}</template>
+  <template id="price-ui-badge__percent-savings-range">{{- 'product.badge.sale_percentage_range_html' | t: price_percent: price_percent -}}</template>
+  <template id="price-ui-badge__percent-savings">{{- 'product.badge.sale_percentage_single_html' | t: price_percent: price_percent -}}</template>
+  <template id="price-ui-badge__price-savings-range">{{- 'product.badge.sale_money_range_html' | t: price: price -}}</template>
+  <template id="price-ui-badge__price-savings">{{- 'product.badge.sale_money_single_html' | t: price: price -}}</template>
+  <template id="price-ui-badge__on-sale">{{- 'product.badge.sale' | t -}}</template>
+  <template id="price-ui-badge__sold-out">{{- 'product.badge.sold_out' | t -}}</template>
+  <template id="price-ui-badge__in-stock">{{- 'product.badge.in_stock' | t -}}</template>
+  {% comment %}Inject @pixelunion/shopify-price-ui/price-ui-globals end{% endcomment %}
+
+  {%- if settings.show_announcement_bar 
+     or settings.show_announcement_bar_ws 
+     or settings.show_announcement_bar_ws_promo -%}
+    {% section 'announcement-bar' %}
+    {% section 'announcement-bar-ws' %}  
+    {% section 'announcement-bar-ws-promo' %}  
+  {%- endif -%}
+
+  {%- if settings.header_layout == "classic" -%}
+    {% section 'header__top-bar' %}
+    {% section 'header__top-bar-ws' %}
+    {% section 'header-classic' %}
+    {% section 'header-classic-ws' %}
+  {%- elsif settings.header_layout == "centered" -%}
+    {% section 'header-centered__top-bar' %}
+    {% section 'header__top-bar-ws' %}
+    {% section 'header-centered' %}
+    {% section 'header-classic-ws' %}
+  {%- elsif settings.header_layout == "vertical" -%}
+    {% section 'header-vertical' %}
+    {% section 'header-classic-ws' %}
+  {%- elsif settings.header_layout == "search_focus" -%}
+    {% section 'header__top-bar' %}
+    {% section 'header__top-bar-ws' %}
+    {% section 'header-search-focus' %}
+    {% section 'header-classic-ws' %}
+  {%- endif -%}
+
+  {%- if settings.cart_action == 'drawer' -%}
+    {% render 'ajax-cart' %}
+  {%- endif -%}
+
+  {% if settings.mega_menu_1 == true %}
+    {% section 'mega-menu-1' %}
+  {% endif %}
+  {% if settings.mega_menu_2 == true %}
+    {% section 'mega-menu-2' %}
+  {% endif %}
+  {% if settings.mega_menu_3 == true %}
+    {% section 'mega-menu-3' %}
+  {% endif %}
+  {% if settings.mega_menu_4 == true %}
+    {% section 'mega-menu-4' %}
+  {% endif %}
+  {% if settings.mega_menu_5 == true %}
+    {% section 'mega-menu-5' %}
+  {% endif %}
+  {% if settings.mega_menu_6 == true %}
+    {% section 'mega-menu-6' %}
+  {% endif %}
+  {% if settings.mega_menu_7 == true %}
+    {% section 'mega-menu-7' %}
+  {% endif %}
+  {% if settings.mega_menu_8 == true %}
+    {% section 'mega-menu-8' %}
+  {% endif %}
+  {% if settings.mega_menu_9 == true %}
+    {% section 'mega-menu-9' %}
+  {% endif %}
+  {% if settings.mega_menu_10 == true %}
+    {% section 'mega-menu-10' %}
+  {% endif %}
+
+  {% if settings.header_layout == "vertical" %}
+    <div class="is-beside-vertical-header">
+  {% endif %}
+
+  <div id="template-{{ template | replace: '.', '-' | handle }}" data-check-for-order="true">
+    <div class="dynamic-sections">
+      {{ content_for_layout }}
+    </div>
+  </div>
+
+  {% if settings.footer_layout == "centered" %}
+    {% section 'footer__icon-bar' %}
+    {% section 'footer__icon-bar-ws' %}
+    {% section 'footer-centered' %}
+    {% section 'footer-classic-ws' %}
+  {% elsif settings.footer_layout == "classic" %}
+    {% section 'footer__icon-bar' %}
+    {% section 'footer__icon-bar-ws' %}
+    {% section 'footer-classic' %}
+    {% section 'footer-classic-ws' %}
+  {% elsif settings.footer_layout == "promotional" %}
+    {% section 'footer__icon-bar' %}
+    {% section 'footer__icon-bar-ws' %}
+    {% section 'footer-promotional' %}
+    {% section 'footer-classic-ws' %}
+  {% endif %}
+
+  {% if settings.header_layout == "vertical" %}
+    </div>
+  {% endif %}
+
+  {% if settings.show_fixed_message %}
+    {% section 'fixed-message' %}
+  {% endif %}
+
+  {% if settings.enable_quickshop %}
+    {% render 'quick-shop' %}
+  {% endif %}
+
+  {% if settings.search_display_style == 'popup' %}
+    {% render 'search-popup' %}
+  {% endif %}
+
+  {% if settings.show_popup %}
+    {% section 'popup' %}
+  {% endif %}
+
+  {% render 'mobile-search' %}
+
+  {% render 'structured-data' %}
+  
+  <!-- Taboola Pixel Code -->
+  <script type='text/javascript'>
+   window._tfa = window._tfa || [];
+    window._tfa.push({notify: 'event', name: 'page_view', id: 1277287});
+    !function (t, f, a, x) {
+           if (!document.getElementById(x)) {
+              t.async = 1;t.src = a;t.id=x;f.parentNode.insertBefore(t, f);
+           }
+    }(document.createElement('script'),
+    document.getElementsByTagName('script')[0],
+    '//cdn.taboola.com/libtrc/unip/1277287/tfa.js',
+    'tb_tfa_script');
+  </script>
+  <noscript>
+    <img src='https://trc.taboola.com/1277287/log/3/unip?en=page_view'
+        width='0' height='0' style='display:none'/>
+  </noscript>
+  <!-- End of Taboola Pixel Code -->
+
+  <!-- Begin Pinterest Tag -->
+  <script>
+  !function(e){if(!window.pintrk){window.pintrk=function()
+  {window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+  n=window.pintrk;n.queue=[],n.version="3.0";var
+  t=document.createElement("script");t.async=!0,t.src=e;var
+  r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}
+  ("https://s.pinimg.com/ct/core.js");
+
+  pintrk('load','2613189077129', { em: '<user_email_address>', });
+  pintrk('page');
+  </script>
+
+  <!-- Pinterest Events -->
+  <script>
+
+  /*addtocart event*/
+  function pinATC(){
+  if (document.querySelectorAll('.add-to-cart-btn-style')) {
+  var ATCbutton = document.querySelectorAll('.add-to-cart-btn-style');
+  for (var i = 0; i < ATCbutton.length; i++) {
+  ATCbutton[i].addEventListener('click', function(){
+  pintrk('track', 'addtocart',{
+  np: 'generator',
+  })})}}}
+
+  document.readyState == 'complete' ? pinATC():window.addEventListener('load', pinATC);
+  </script>
+  <!-- End Pinterest Tag -->
+
+  {{'font-awesome.min.css' | asset_url | stylesheet_tag}}
+  {{ 'fancybox.css' | asset_url | stylesheet_tag }}
+
+  {% comment %} ReCharge Script {% endcomment %}
+  {% render 'subscription-theme-footer' %}
+
+  {% comment %} Wholesale Gorilla {% endcomment %}
+  {% comment %}{% include 'wsg-header' %}{% endcomment %}
+  
+  {% comment %} Redirects {% endcomment %}
+  {% if collection.handle == 'get-h-proof' 
+    or product.handle == "10-packets"
+    or product.handle == "20-packets"
+    or product.handle == "50-packets"
+    or product.handle == "h-proof"
+  %}
+      <script type="text/javascript">
+          window.location = "/products/h-proof-bottle";
+      </script>
+  {% endif %}
+
+  {% if product.tags contains 'dev' %}
+    <script type="text/javascript">
+        window.location = "/products/h-proof-bottle";
+    </script>
+  {% endif %}
+
+  {% comment %} Redirects - End {% endcomment %}
+
+  {% comment %} Wholesale Redirects {% endcomment %}
+
+  {% if template.name == "index" %}
+    {% if customer.tags contains 'wholesale-prospect'%}
+      {% unless customer.tags contains 'free-pos-ordered'
+        or customer.tags contains 'free-pos-expired'
+        or customer.tags contains 'logged-in' %}
+        <script>window.location.href= '/products/free-point-of-sale'</script>
+      {% endunless %}
+    {% endif %}
+  {% endif %}
+  
+  {% if customer and customer.tags contains 'wholesale' %}   
+    {% if template contains 'product' %}
+      {% unless product.tags contains 'wholesale' %}
+        <script type="text/javascript">
+            window.location = "/";
+        </script>
+      {% endunless %}
+    {% endif %}
+    {% if template contains 'collection' %}
+      {% unless collection.metafields.custom.wholesale %}
+        <script type="text/javascript">
+            window.location = "/";
+        </script>
+      {% endunless %}
+    {% endif %} 
+    {% if product.tags contains 'wholesale-lp' %}
+      {% if customer.tags contains 'wholesale-prospect' %}
+        {% if customer.tags contains 'free-pos-ordered'
+          or customer.tags contains 'free-pos-expired' %}
+          <script type="text/javascript">
+              window.location = "/";
+          </script>
+        {% endif %}
+      {% endif %}
+    {% endif %}   
+  {% endif %}
+  
+  {% comment %} End - Wholesale Redirects {% endcomment %}
+
+  {% comment %} Inactive Redirects {% endcomment %}
+  {% comment %}
+  
+  {% if collection.handle == 'all' %}
+    <script type="text/javascript">
+        window.location = "/collections/test";
+    </script>
+  {% endif %}
+  
+  {% if product.handle == 'h-proof-bottle' %}
+    <script type="text/javascript">
+        window.location = "/products/test";
+    </script>
+  {% endif %}
+  
+  {% if product.handle == 'h-proof-packets-test' %}
+    <script type="text/javascript">
+        window.location = "/products/h-proof-packets-new";
+    </script>
+  {% endif %}
+  {% if product.handle == "the-anytime-you-drink-vitamin®-bulk-event-packets" %}
+      <script type="text/javascript">
+          window.location = "/products/h-proof-packets-new";
+      </script>
+  {% endif %}
+  
+  {% endcomment %}
+  {% comment %} End - Inactive Redirects  {% endcomment %}
+
+  {% comment %}Body Scripts{% endcomment %}
+  {% if settings.disqus_enabled %}
+    {% if template contains "blog" or template contains "article" or template contains "index" %}
+      <script id="dsq-count-scr" src="//{{ settings.disqus_shortname }}.disqus.com/count.js" async></script>
+    {% endif %}
+  {% endif %}
+    <script src="https://cdn.attn.tv/h-proof/dtag.js"></script>
+
+  {%- comment -%}Rebuy Script - Disabled for Wholesale Customers{%- endcomment -%}
+  {% comment %}
+  {% unless customer and customer.tags contains 'wholesale' %}
+    <script async src="https://cdn.rebuyengine.com/onsite/js/rebuy.js?shop={{ shop.permanent_domain }}"></script>
+  {% endunless %}
+  {% endcomment %}
+  
+  {% comment %}Unused Body Scripts{% endcomment %} 
+  {% comment %}
+  {% if template and template != 'cart' %}  
+    <script src="{{ 'subscription-theme-footer.js' | asset_url }}" defer=""></script>
+  {% endif %} 
+  {% endcomment %} 
+  
+</body>
+</html>
+{% endcapture %}
+{% assign content = content | replace_first: '<!doctype', '!doctype' | split: ' <' %}
+{%- for html in content -%}{%- assign htmlblock = html | strip | prepend: ' <' -%}{{htmlblock | replace: ' </', '</'}}{%- endfor -%}

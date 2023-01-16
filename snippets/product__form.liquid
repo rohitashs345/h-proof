@@ -1,0 +1,602 @@
+{% if show_payment_button == false or product.selling_plan_groups.size > 0 %}
+  {% assign show_payment_button = false %}
+{% else %}
+  {% assign show_payment_button = true %}
+{% endif %}
+
+{% assign selected_variant = selected_variant %}
+<div
+  class="
+    clearfix
+    product_form
+    init
+    smart-payment-button--{{ show_payment_button }}
+    {% if product.variants.size > 1 or product.options.size > 1 %}product_form_options{% endif %}
+    product_form--{{ settings.product_form_style }}
+    {% if section.settings.option_style == 'radio' %}three-step-form{% else %}standard-form{% endif %}
+    {% unless product.selling_plan_groups.size > 0 %}non-subscription{% endunless %}
+  "
+  id="product-form-{{ product.id }}"
+  data-product-form
+  data-money-format="{{ shop.money_format | strip_html }}"
+  data-shop-currency="{{ shop.currency }}"
+  data-select-id="product-select-{{ product.id }}{{ product-form }}{{ object.id }}{{ block.id }}"
+  data-enable-state="{% if template.name == 'product' %}true{% else %}false{% endif %}"
+  {% if settings.limit_quantity or settings.display_inventory_left %}
+    data-variant-inventory='[{%- for v in product.variants -%}{"id":{{v.id}},"inventory_quantity":{{v.inventory_quantity}},"inventory_management":"{{v.inventory_management}}","inventory_policy":"{{v.inventory_policy}}"}{% if forloop.last == false %},{% endif %}{%- endfor -%}]'
+  {% endif %}
+  data-product-id="{{ product.id }}"
+>
+  {% form 'product', product, data-productid: product.id, class: 'product-form-detail' %}
+    <div class="product-cart-bar hide">
+      <div class="product-title-bar">
+        {{ product.title }}
+      </div>
+      {% render 'product-price-selling-plan', product: product, current_variant: selected_variant %}
+    </div>
+    {% unless product.metafields.custom.landing_page
+        or product.tags contains 'wholesale'
+        or customer and customer.tags contains 'wholesale' %}
+      <div style="display: none;" data-shop-pay-installments-template>{{ form | payment_terms }}</div>
+    {% endunless %}
+    
+    {% comment %}
+      Display variant options for a product
+
+      @param product
+      @param selected_variant
+      @param style
+
+      @param enable_swatches
+      @param swatches_shape
+      @param swatches_option_trigger
+      @param swatches_option_style
+      @param swatches_product_page_size
+      @param swatch_colors
+    {% endcomment %}
+    {% assign style = 'select' %}
+    {% if section.settings.option_style == 'radio' %}
+      {% assign style = 'radio' %}
+    {% endif %}
+    {% assign product = product %}
+    {% assign sold_out_options = sold_out_options %}
+    {% assign enable_swatches = settings.enable_swatches %}
+    {% assign swatches_shape = settings.swatch_style %}
+    {% assign swatches_option_trigger = 'color' %}
+    {% comment %}Inject @pixelunion/shopify-variants-ui/variant-selection begin{% endcomment %}
+    {% comment %}
+      Display variant options for a product
+    
+      @param product
+      @param selected_variant
+      @param variant_selection_id
+      @param sold_out_options
+      @param style
+    
+      @param enable_swatches
+      @param swatches_shape
+      @param swatches_option_trigger
+      @param swatches_option_style
+      @param swatches_product_page_size
+      @param swatch_colors
+    {% endcomment %}
+    
+    <variant-selection
+      {% if variant_selection_id != blank %}id="{{ variant_selection_id }}"{% endif %}
+      class="variant-selection"
+      product-url="{{ product.url }}.js"
+      variant="{% if selected_variant %}{{ selected_variant.id }}{% else %}not-selected{% endif %}"
+      data-variant-selection
+    >
+      {% if product.has_only_default_variant %}
+        <input
+          class="variant-selection__variants variant-selection__variants--default"
+          name="id" data-productid="{{ product.id }}"
+          type="hidden"
+          value="{{ product.variants.first.id }}"
+          data-variants
+        >
+      {% else %}
+        <noscript>
+          <style>
+            .variant-selection__variants {
+              display: block !important;
+            }
+          </style>
+        </noscript>
+        <select
+          class="variant-selection__variants"
+          name="id" data-productid="{{ product.id }}"
+          style="display: none"
+          data-variants
+        >
+          <option
+            value="not-selected"
+            disabled
+            {% if selected_variant == blank %}selected{% endif %}
+          >
+            {{ 'product.variants.choose_variant' | t }}
+          </option>
+          {% for variant in product.variants %}
+            <option
+              {% if selected_variant and selected_variant.id == variant.id %}selected{% endif %}
+              value="{{ variant.id }}"
+              {% unless variant.available %}disabled{% endunless %}
+            >
+              {{ variant.title }} - {{ variant.price | money }}
+            </option>
+          {% endfor %}
+        </select>
+    
+        {% comment %}Inject @pixelunion/shopify-variants-ui/options-selection begin{% endcomment %}
+        {% comment %}
+          Display variant options for a product
+        
+          @param product
+          @param selected_variant
+          @param variant_selection_id
+          @param sold_out_options
+          @param style
+        
+          @param enable_swatches
+          @param swatches_shape
+          @param swatches_option_trigger
+          @param swatches_option_style
+          @param swatches_product_page_size
+          @param swatches_custom_colors
+        {% endcomment %}
+        
+        <options-selection
+          {% if variant_selection_id != blank %}variant-selection="{{ variant_selection_id }}"{% endif %}
+          style="display: none;"
+          {% if sold_out_options == 'disabled' %}disable-unavailable{% endif %}
+          {% if sold_out_options == 'hidden' %}remove-unavailable{% endif %}
+          data-options-selection
+        >
+          <script>
+            (function() {
+              const scriptTag = document.scripts[document.scripts.length - 1];
+              const parentTag = scriptTag.parentNode;
+        
+              parentTag.style.display = '';
+            })()
+          </script>
+        
+          {% for option in product.options_with_values %}
+            {% assign option_index = forloop.index0 %}
+            {% assign show_swatches = false %}
+            {% if enable_swatches %}
+              {%- assign swatches_option_trigger = swatches_option_trigger | strip | downcase -%}
+              {%- assign option_name = option.name | strip | downcase -%}
+        
+              {% if option_name == swatches_option_trigger %}
+                {% assign show_swatches = true %}
+                {% assign swatch_option_key = 'option' | append: forloop.index %}
+              {% endif %}
+            {% endif %}
+        
+            {% if style == 'select' and show_swatches == false %}
+              {%
+                render 'options-select',
+                product: product,
+                selected_variant: selected_variant,
+                option: option,
+                option_index: option_index
+              %}
+            {% elsif style == 'radio' or show_swatches == true %}
+              {%
+                render 'options-radios',
+                product: product,
+                selected_variant: selected_variant,
+                option: option,
+                option_index: option_index,
+                show_swatches: show_swatches,
+                swatch_option_key: swatch_option_key,
+                swatch_size: swatches_product_page_size,
+                swatches_option_style: swatches_option_style
+              %}
+            {% endif %}
+          {% endfor %}
+        </options-selection>
+        {% comment %}Inject @pixelunion/shopify-variants-ui/options-selection end{% endcomment %}
+    
+      {% endif %}
+    </variant-selection>
+    {% comment %}Inject @pixelunion/shopify-variants-ui/variant-selection end{% endcomment %}
+
+    {% if product.available %}
+      {% if section.settings.option_style == 'radio' %}
+        {% render 'custom--selling-plans', product: product, current_variant: selected_variant %}
+      {% else %}
+        {% render 'selling-plans', product: product, current_variant: selected_variant %}
+      {% endif %}
+    {% endif %}
+
+    {% if product.available %}
+      {% if settings.display_inventory_left %}
+        <p class="items_left">
+          {% if selected_variant.inventory_management != blank and selected_variant.inventory_quantity > 0 %}
+            {% capture items_left_text %}
+              {% if selected_variant.inventory_quantity == 1 %}
+                {{ 'products.product.items_left_count.one' | t }}
+              {% else %}
+                {{ 'products.product.items_left_count.other' | t }}
+              {% endif %}
+            {% endcapture %}
+            {% if selected_variant.inventory_quantity <= settings.inventory_threshold %}
+              {{ selected_variant.inventory_quantity }} {{ items_left_text }}
+            {% endif %}
+          {% endif %}
+        </p>
+      {% endif %}
+      {% if product.tags contains "show-price"
+          or product.tags contains "wholesale" %}
+        <div class="product-block product-block--price-bulk non-subscription">
+          {% comment %} Price {% endcomment %}
+          <div class="modal_price subtitle" data-display-savings="{{ block.settings.display_savings }}">
+            {% if section_onboarding %}
+              <span class="money">$49.00</span>
+            {% else %}
+              {% comment %}Inject @pixelunion/shopify-price-ui/price-ui begin{% endcomment %}
+              <div class="price-ui price-ui--loading is-justify-center is-align-center" data-price-ui>
+                <noscript>
+                  <style>
+                    .price-ui--loading {
+                      display: block !important;
+                      opacity: 1 !important;
+                    }
+                  </style>
+                </noscript>
+                {% assign compare_at_price = false %}
+              
+                {% if product.compare_at_price and product.compare_at_price != product.price %}
+                  {% if product.compare_at_price_varies %}
+                    {%- capture price_min -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price-min',
+                        value: product.compare_at_price_min,
+                      -%}
+                    {%- endcapture -%}
+              
+                    {%- capture price_max -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price-max',
+                        value: product.compare_at_price_max,
+                      -%}
+                    {%- endcapture -%}
+              
+                    {%- assign compare_at_price = 'product.price.range_html' | t: price_min: price_min, price_max: price_max -%}
+                  {% else %}
+                    {%- capture compare_at_price -%}
+                      {%-
+                        render 'price-ui-templates',
+                        template: 'price',
+                        value: product.compare_at_price,
+                      -%}
+                    {%- endcapture -%}
+                  {% endif %}
+                {% endif %}
+              
+                {% if product.price_varies %}
+                  {%- capture price_min -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price-min',
+                      value: product.price_min,
+                    -%}
+                  {%- endcapture -%}
+              
+                  {%- capture price_max -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price-max',
+                      value: product.price_max,
+                    -%}
+                  {%- endcapture -%}
+              
+                  {%- assign price = 'product.price.range_html' | t: price_min: price_min, price_max: price_max -%}
+                {% else %}
+                  {%- capture price -%}
+                    {%-
+                      render 'price-ui-templates',
+                      template: 'price',
+                      value: product.price,
+                    -%}
+                  {%- endcapture -%}
+                {% endif %}
+
+                {%-
+                  render 'price-ui-templates',
+                  template: 'price-ui',
+                  compare_at_price: compare_at_price,
+                  price: price,
+                  test-price: price,
+                  unit_pricing: false,
+                -%}
+              </div>
+              {% comment %}Inject @pixelunion/shopify-price-ui/price-ui end{% endcomment %}
+
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if section.settings.option_style == 'dropdown' %}
+        {{ form | payment_terms }}
+      {% endif %}
+
+      <div class="purchase-details {% if settings.display_product_quantity %}has-quantity-box{% endif %}">
+        {% if settings.display_product_quantity %}
+          <div class="purchase-details__quantity product-quantity-box quantity-box--{{ settings.qty_box_style }}">
+            {% render 'quantity-box' %}
+          </div>
+        {% endif %}
+        {% comment %} Error message for add to cart action {% endcomment %}
+        <div class="cart-warning"></div>
+        <div class="purchase-details__buttons purchase-details__spb--{{ show_payment_button }}">
+          {% if settings.cart_action == 'reload_page' %}
+            <input type="hidden" name="return_to" value="back" />
+          {% elsif settings.cart_action == 'redirect_cart' %}
+            <input type="hidden" name="return_to" value="{{ routes.cart_url }}" />
+          {% endif %}
+
+          {% capture add_to_cart_label %}{% if collection_handles contains 'pre-order' %}{{ 'collections.general.pre_order' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}{% endcapture %}
+          {%- comment -%} Check for products tag {%- endcomment -%}
+          {%- if product.tags contains 'wholesale' -%}
+             {%- comment -%} Check for customer tag == 'wholesale' {%- endcomment -%}
+              {%- if customer and customer.tags contains 'wholesale' -%}
+                {%- comment -%} Check if POS ordered {%- endcomment -%}
+                {% assign posOrdered = false %}
+
+                {%- for item in cart.items -%}
+                  {% if item.product.handle == 'free-point-of-sale' %}
+                    {%- assign posOrdered = true -%}
+                  {% endif %}
+                {%- endfor -%}
+
+                {% if product.handle == 'free-point-of-sale' %}
+                  {% if customer and customer.tags contains 'wholesale' %}
+                    {%- if customer.tags contains 'wholesale-prospect' -%}
+                      {% if posOrdered %}
+                        <a href="/cart" class="button button__action">Proceed to Checkout</a>
+                      {% else %}                        
+                        <button type="submit" name="add" class="button {% if settings.cart_action == 'mini_cart' or settings.cart_action == 'drawer' %} ajax-submit {% endif %}action_button button--add-to-cart {% if show_payment_button %} action_button--secondary {% endif %}" data-label={{ add_to_cart_label | json }} data-add-to-cart-trigger>
+                          {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'left' %}
+                            {%
+                              render 'icon',
+                              name: settings.button_cart_icon,
+                              icon_class: 'icon--cart'
+                            %}
+                          {% endif %}
+                          <span class="text">{{ add_to_cart_label }}</span>
+                          {% unless product.tags contains 'wholesale' 
+                              or product.tags contains 'lp' %}
+                            <label class="product-price__saving"></label>
+                          {% endunless %}
+                          {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'right' %}
+                            {%
+                              render 'icon',
+                              name: settings.button_cart_icon,
+                              icon_class: 'icon--cart icon--right'
+                            %}
+                          {% endif %}
+                          <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" class="checkmark">
+                            <path fill="none" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"/>
+                          </svg>
+                          <!-- Yahoo! Push Script -->
+                          <script type="application/javascript">
+                            window.dotq = window.dotq || [];
+                            window.dotq.push(
+                            {
+                            'projectId': '10000',
+                            'properties': {
+                            'pixelId': ' 10168604',
+                            'qstrings': {
+                            'et': 'custom',
+                            'ec': 'addtocart'
+                            }
+                            } } ); 
+                          </script>
+                          <!-- Reddit Ads ATC Script -->
+                          <script>
+                          const addToCartButton = document.getElementById('addToCart');
+                          addToCartButton.addEventListener('click', () => rdt('track', 'AddToCart'));
+                          </script>
+                        </button>
+                      {% endif %}
+                    {%- elsif customer.tags contains 'free-pos-ordered' -%}
+                      <div class="button action_button disabled">{{ add_to_cart_label }}</div>
+                      <div class="pos-warning bounceIn">Limit: One per customer</div>
+                    {% else %}
+                      <div class="button action_button disabled">{{ add_to_cart_label }}</div>
+                      <div class="pos-warning bounceIn">Sorry, it looks like you're not eligible for this offer.</div>
+                    {%- endif -%} 
+                  {%- endif -%}                 
+                {% else %}
+                  {%- comment -%} Show normal button for 'wholesale' product and customer {%- endcomment -%}
+                    <button type="submit" name="add" class="button {% if settings.cart_action == 'mini_cart' or settings.cart_action == 'drawer' %} ajax-submit {% endif %}action_button button--add-to-cart {% if show_payment_button %} action_button--secondary {% endif %}" data-label={{ add_to_cart_label | json }} data-add-to-cart-trigger>
+                      {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'left' %}
+                        {%
+                          render 'icon',
+                          name: settings.button_cart_icon,
+                          icon_class: 'icon--cart'
+                        %}
+                      {% endif %}
+                      <span class="text">{{ add_to_cart_label }}</span>
+                      {% unless product.tags contains 'wholesale' 
+                          or product.tags contains 'lp' %}
+                        <label class="product-price__saving"></label>
+                      {% endunless %}
+                      {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'right' %}
+                        {%
+                          render 'icon',
+                          name: settings.button_cart_icon,
+                          icon_class: 'icon--cart icon--right'
+                        %}
+                      {% endif %}
+                      <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" class="checkmark">
+                        <path fill="none" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"/>
+                      </svg>
+                      <!-- Yahoo! Push Script -->
+                      <script type="application/javascript">
+                        window.dotq = window.dotq || [];
+                        window.dotq.push(
+                        {
+                        'projectId': '10000',
+                        'properties': {
+                        'pixelId': ' 10168604',
+                        'qstrings': {
+                        'et': 'custom',
+                        'ec': 'addtocart'
+                        }
+                        } } ); 
+                      </script>
+                      <!-- Reddit Ads ATC Script -->
+                      <script>
+                      const addToCartButton = document.getElementById('addToCart');
+                      addToCartButton.addEventListener('click', () => rdt('track', 'AddToCart'));
+                      </script>
+                    </button>
+                {% endif %}                
+              {% else %}
+                <a href="/pages/wholesale" class="button action_button">Sign in for Wholesale Access</a>
+              {%- endif -%}
+              {% else %}
+              <button type="submit" name="add" class="button {% if settings.cart_action == 'mini_cart' or settings.cart_action == 'drawer' %} ajax-submit {% endif %}action_button button--add-to-cart {% if show_payment_button %} action_button--secondary {% endif %}" data-label={{ add_to_cart_label | json }} data-add-to-cart-trigger>
+                {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'left' %}
+                  {%
+                    render 'icon',
+                    name: settings.button_cart_icon,
+                    icon_class: 'icon--cart'
+                  %}
+                {% endif %}
+                <span class="text">{{ add_to_cart_label }}</span>
+                {% unless product.tags contains 'wholesale' 
+                    or product.tags contains 'lp' %}
+                  <label class="product-price__saving"></label>
+                {% endunless %}
+                {% if  settings.button_cart_icon != blank and settings.button_cart_icon_position == 'right' %}
+                  {%
+                    render 'icon',
+                    name: settings.button_cart_icon,
+                    icon_class: 'icon--cart icon--right'
+                  %}
+                {% endif %}
+                <svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32" class="checkmark">
+                  <path fill="none" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"/>
+                </svg>
+                <!-- Yahoo! Push Script -->
+                <script type="application/javascript">
+                  window.dotq = window.dotq || [];
+                  window.dotq.push(
+                  {
+                  'projectId': '10000',
+                  'properties': {
+                  'pixelId': ' 10168604',
+                  'qstrings': {
+                  'et': 'custom',
+                  'ec': 'addtocart'
+                  }
+                  } } ); 
+                </script>
+                <!-- Reddit Ads ATC Script -->
+                <script>
+                const addToCartButton = document.getElementById('addToCart');
+                addToCartButton.addEventListener('click', () => rdt('track', 'AddToCart'));
+                </script>
+              </button>              
+          {%- endif -%}
+          
+          {% if show_payment_button %}
+            {{ form | payment_button }}
+          {% endif %}
+          <!--  -->
+          {% if section.settings.show_message %}
+          <div class="product-promo-messages mt-sm">
+            <div class="promo-messages-inner">
+              <div class="promo-message col
+                          {% if section.settings.promo_message_2 != blank %}
+                            one-half
+                          {% else %}
+                            one-whole
+                          {% endif %}
+                          medium-down--one-whole'
+                          {% if section.settings.promo_hover_1 != blank or section.settings.promo_hover_1_html != blank %}
+                            hover-trigger
+                          {% endif %}
+                          ">
+                <div class="promo-message-main">
+                  {% if section.settings.promo_icon_1 != blank or section.settings.promo_icon_svg_1 != blank %}
+                    <div class="promo-message-icon">
+                      {% if section.settings.promo_icon_svg_1 != blank %}
+                        <img src="{{ section.settings.promo_icon_svg_1 }}">
+                      {% else %}
+                        {% render 'image-element',
+                            image: section.settings.promo_icon_1
+                        %}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  <div class="promo-message-text">{{ section.settings.promo_message_1 }}</div>
+                </div>
+                {% if section.settings.promo_hover_1 != blank or section.settings.promo_hover_1_html != blank %}
+                <span class="hover-text content">
+                  {% if section.settings.promo_hover_1_html != blank %}
+                    {{ section.settings.promo_hover_1_html }}
+                  {% else %}
+                    <span class="text-align-center">{{ section.settings.promo_hover_1 }}</span>
+                  {% endif %}
+                </span>
+                {% endif %}
+              </div>
+              {% if section.settings.promo_message_2 != blank %}
+              <div class="promo-message col one-half medium-down--one-whole
+                          {% if section.settings.promo_hover_2 != blank or section.settings.promo_hover_2_html != blank %}
+                            hover-trigger
+                          {% endif %}">
+                <div class="promo-message-main">
+                  {% if section.settings.promo_icon_2 != blank or section.settings.promo_icon_svg_2 != blank %}
+                    <div class="promo-message-icon">
+                      {% if section.settings.promo_icon_svg_2 != blank %}
+                        <img src="{{ section.settings.promo_icon_svg_2 }}">
+                      {% else %}
+                        {% render 'image-element',
+                            image: section.settings.promo_icon_2
+                        %}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  <div class="promo-message-text">{{ section.settings.promo_message_2 }}</div>
+                  {% if section.settings.promo_hover_2 != blank or section.settings.promo_hover_2_html != blank %}{% render 'icon-custom', name: 'info' %}{% endif %}
+                </div>
+                {% if section.settings.promo_hover_2 != blank or section.settings.promo_hover_2_html != blank %}
+                <span class="hover-text content">
+                  {% if section.settings.promo_hover_2_html != blank %}
+                    {{ section.settings.promo_hover_2_html }}
+                  {% else %}
+                    <span class="text-align-center">{{ section.settings.promo_hover_2 }}</span>
+                  {% endif %}
+                </span>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endif %}
+          {% if section.settings.option_style == 'radio' %}
+            {% unless product.metafields.custom.landing_page 
+              or customer and customer.tags contains 'wholesale' %}
+              {{ form | payment_terms }}
+            {% endunless %}
+          {% endif %}
+          <!--  -->
+        </div>
+      </div>
+    {% endif %}
+  {% endform %}
+
+  <div class="surface-pick-up surface-pick-up--loading" data-surface-pick-up></div>
+  <div class="surface-pick-up__modal" data-surface-pick-up-modal></div>
+</div>

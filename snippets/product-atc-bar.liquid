@@ -1,0 +1,69 @@
+<div class="row product-bar" id="productBar">
+  <div class="product-bar__info  is-hidden-mobile-only">
+     <div> 
+      {% comment %} Name {% endcomment %}
+        <h4 class="product_name title">{{ product.title }}</h4>
+        {% comment %} Price {% endcomment %}
+        <p class="modal_price subtitle">
+          {% if collection_handles contains 'coming-soon' %}
+            {% if settings.stickers_enabled == false %}
+              {{ 'collections.general.coming_soon' | t }}
+            {% endif %}
+          {% else %}
+
+            {% comment %} Sold out {% endcomment %}
+            <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+
+            {% comment %} Current price {% endcomment %}
+            <span class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
+
+              <span class="current_price {% if product.available == false %}hidden{% endif %}" data-unit="{{unit_text}}">
+                {% if variant.price > 0 %}
+                  <span class="money">
+                    {% render 'price-element', price: variant.price %}
+                  </span>            
+                {% else %}
+                  {{ settings.free_price_text }}
+                {% endif %}
+              </span>
+              {% if variant.price > 0 %}
+                {% unless  section.settings.unit_text == '' %}
+                <span class="unit-text">
+                <span class="unit">( {{ product.selected_or_first_available_variant.price | divided_by: product.selected_or_first_available_variant.options[0] | money_without_trailing_zeros }} / {{section.settings.unit_text}} )</span>
+                </span>
+                {% endunless %}
+              {% endif %}
+            </span>
+
+            {% comment %} Compare at (original) price {% endcomment %}
+            <span class="was-price">
+              {% if variant.price < variant.compare_at_price and variant.available %}
+                <span class="money">
+                  {% render 'price-element', price: variant.compare_at_price %}
+                </span>                  
+              {% endif %}
+            </span>
+            {% comment %}{% if variant.price < variant.compare_at_price and variant.available %}
+              {% unless  section.settings.unit_text == '' %}
+              <span class="unit-text">
+              <span class="unit">( {{ product.selected_or_first_available_variant.price | divided_by: product.selected_or_first_available_variant.options[0] | money_without_trailing_zeros }} / {{section.settings.unit_text}} )</span>
+              </span>
+              {% endunless %}
+            {% endif %}{% endcomment %}
+
+          {% endif %}
+        </p>
+    </div>        
+  </div>
+  <div class="product-bar__options">
+    <div class="product-bar__swatch" >      
+      {% unless collection_handles contains 'coming-soon' %}
+        {% render 'product__form__atc-bar',
+                context: 'product',
+                show_payment_button: section.settings.show_payment_button,
+                collection_handles: collection_handles
+        %}
+      {% endunless %}
+    </div>
+  </div>
+</div>

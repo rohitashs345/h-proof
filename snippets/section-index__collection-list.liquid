@@ -1,0 +1,172 @@
+{% comment %}
+** Collection list **
+{% endcomment %}
+
+{% comment %} Content settings {% endcomment %}
+{%- assign blocks = section.blocks -%}
+{% comment %} End content settings {% endcomment %}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{%- assign overlay_alpha = section.settings.overlay_background | color_extract: 'alpha' -%}
+{%- assign overlay_text_alpha = section.settings.overlay_text | color_extract: 'alpha' -%}
+{% comment %} Opacity level {% endcomment %}
+{% if overlay_alpha != 0 %}
+  {%- assign overlay_background_alpha = section.settings.overlay_background_opacity | divided_by: 100.00 -%}
+{% endif %}
+
+{% if section.settings.align_height %}
+  {%- assign collection_height = section.settings.collection_height -%}
+{% endif %}
+
+{%- capture section_css -%}
+  {% if section.settings.align_height != blank %}
+    .placeholder-svg {
+      height: {{ collection_height }}px;
+      max-height: {{ collection_height }}px;
+    }
+  {% endif %}
+
+  .collection-thumbnail-overlay {
+    background-color: {%- if overlay_alpha != 0 -%}{{ section.settings.overlay_background | color_modify: 'alpha', overlay_background_alpha }}{% endif %};
+  }
+
+  .collection-info__caption span {
+    color: {%- if overlay_text_alpha != 0 -%}{{ section.settings.overlay_text }}{% endif %}
+  }
+{%- endcapture -%}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if section.settings.width == 'wide' %}
+      width: 100%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: section.id
+  %}
+  {% render 'css-loop',
+          css: section.settings.custom_css,
+          id: section.id
+  %}
+{% endstyle %}
+
+<section class="section
+                {{ section.settings.css_class }}
+                is-width-{{ section.settings.width }}
+                {% if section.settings.show_gutter == false %}
+                  has-no-side-gutter
+                  has-background
+                {% else %}
+                  has-gutter-enabled
+                {% endif %}
+                {% if blocks.size > section.settings.collections_per_row %}
+                  has-multirow-blocks
+                {% endif %}
+                "
+                {% if section.settings.animation != "none" %}
+                  data-scroll-class="{{ section.settings.animation }}"
+                {% endif %}>
+
+  <div class="container">
+    {% if blocks.size > 0 %}
+
+      {% for block in blocks %}
+
+        {% comment %} Content settings {% endcomment %}
+        {%- assign collection = collections[block.settings.feature_collection] -%}
+        {%- assign image = block.settings.image -%}
+        {%- assign title = block.settings.title -%}
+        {%- assign button_label = block.settings.button_label -%}
+        {% comment %} End content settings {% endcomment %}
+
+        {% if image != blank %}
+          {%- assign collection_image = image -%}
+          {%- assign collection_image_alt = image.alt | escape -%}
+        {% elsif collection.image != blank %}
+          {%- assign collection_image = collection.image -%}
+          {%- assign collection_image_alt = collection.image.alt | escape -%}
+        {% else collection.empty? == false %}
+          {%- assign collection_image = collection.products.first.featured_image -%}
+          {%- assign collection_image_alt = collection.products.first.featured_image.alt | escape -%}
+        {% endif %}
+
+        <div class="column
+                    {% render 'column-width', value: section.settings.collections_per_row %}
+                    thumbnail
+                    {% if section.settings.align_height %}
+                      list-collection--align-height
+                    {% endif %}
+                    {% if section.settings.show_gutter == true %}
+                      has-gutter
+                      has-gutter--mobile
+                    {% endif %}
+                    list-collection__thumbnail
+                    medium-down--one-whole">
+
+          <div class="product-wrap enable-zoom-{{ section.settings.enable_zoom }}">
+            <div class="collection-thumbnail-overlay"></div>
+
+            {% if collection_image != blank %}
+              <div class="thumbnail image__container has-image-crop">
+                {% render 'image-element',
+                        image: collection_image.src,
+                        alt: collection_image_alt,
+                        image_crop: true,
+                        max_height: collection_height
+                %}
+              </div>
+            {% else %}
+              {% capture num %}{% cycle "1", "2", "3", "4", "5", "6" %}{% endcapture %}
+              {{ 'collection-' | append: num | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+
+            <a class="collection-info__caption" href="{{ collection.url }}">
+              {% if section.settings.collection_title_below_image == blank %}
+                <div class="collection-info__caption-wrapper">
+                  <span class="title">
+                    {% if title != blank %}
+                      {{ title }}
+                    {% elsif collection != blank %}
+                      {{ collection.title }}
+                    {% else %}
+                      {{ "homepage.onboarding.collection_title" | t }}
+                    {% endif %}
+                  </span>
+                  {% render 'button',
+                          label: button_label,
+                          href: collection.url,
+                          style: section.settings.button_style
+                  %}
+                </div>
+              {% endif %}
+            </a>
+          </div>
+          {% if section.settings.collection_title_below_image != blank %}
+            <a class="collection-info__caption-wrapper collection-info__caption--below-image" href="{{ collection.url }}">
+              <span class="title">
+                {% if title != blank %}
+                  {{ title }}
+                {% elsif collection != blank %}
+                  {{ collection.title }}
+                {% else %}
+                  {{ "homepage.onboarding.collection_title" | t }}
+                {% endif %}
+              </span>
+              {% render 'button',
+                      label: button_label,
+                      href: collection.url,
+                      style: section.settings.button_style
+              %}
+            </a>
+          {% endif %}
+        </div>
+
+      {% endfor %}
+
+    {% endif %}
+  </div>
+</section>

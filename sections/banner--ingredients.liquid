@@ -1,0 +1,79 @@
+<div class="section-ingredients">
+  <div class="container medium">
+    <div class="col text-col one-half">
+      {{- section.settings.desc -}}
+    </div>
+    <div class="col image-col one-half" {% if section.settings.id %}id="{{ section.settings.id }}"{% endif %} >
+      {% if section.settings.image != blank %}
+        <img class="section-ingredients__img" src="{{ section.settings.image | img_url: '950x' }}" alt="">
+      {% else %}
+        <img class="section-ingredients__img" src="{{ section.settings.url_img }}" alt="">
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-ingredients {
+    background-color: #f2fefc;
+    padding: 40px 25px;
+    color: #000;
+    font-size: 16px;
+  }
+  .section-ingredients a {
+    color: #1AE7BD;
+  }
+  .section-ingredients .text-col {
+    padding-right: 30px;
+    line-height: 30px;
+  }
+
+  @media (max-width: 767px) {
+    .section-ingredients {
+      border-radius: 75px 0 75px 0;
+      margin-bottom: 20px;
+    }
+
+    .section-ingredients .text-col {
+      width: 100%;
+      padding-right: 0;
+      margin-bottom: 30px;
+    }
+
+    .section-ingredients .image-col {
+      width: 100%;
+    }
+  }
+</style>
+{% schema %}
+  {
+    "name": "Ingredients",
+    "settings": [
+      {
+        "type": "text",
+        "id": "id",
+        "label": "Set id for section"
+      },
+      {
+        "type": "richtext",
+        "id": "desc",
+        "label": "Description"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Select Image"
+      },
+      {
+        "type": "url",
+        "id": "url_img",
+        "label": "Image SVG URL"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image with text"
+      }
+    ]
+  }
+{% endschema %}

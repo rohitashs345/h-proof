@@ -1,0 +1,112 @@
+{% comment %}
+** Rich text **
+{% endcomment %}
+
+{%- assign title = section.settings.title -%}
+{%- assign heading_font = section.settings.heading_font -%}
+{%- assign heading_color = section.settings.heading_color -%}
+{%- assign heading_alignment = section.settings.heading_alignment -%}
+{%- assign heading_size = section.settings.heading_size -%}
+{%- assign text = section.settings.text -%}
+{%- assign text_font = section.settings.text_font -%}
+{%- assign text_color = section.settings.text_color -%}
+{%- assign text_alignment = section.settings.text_alignment -%}
+{%- assign text_size = section.settings.text_size -%}
+
+{% comment %} Is the color set to transparent? {% endcomment %}
+{%- assign heading_alpha = heading_color | color_extract: 'alpha' -%}
+{%- assign text_alpha = text_color | color_extract: 'alpha' -%}
+{%- assign background_alpha = section.settings.background | color_extract: 'alpha' -%}
+{%- assign gradient_alpha = section.settings.gradient | color_extract: 'alpha' -%}
+
+{% comment %} Section specific CSS {% endcomment %}
+{% capture section_css -%}
+
+  .section {
+    background-image: linear-gradient({{ section.settings.gradient_rotation }}deg, rgba(255,255,255,0), {{ section.settings.gradient }});
+    background-color: {%- if background_alpha != 0 -%}{{ section.settings.background }}{%- endif -%};
+  }
+
+  .rich-text__heading {
+    font-size: {{ heading_size }}px;
+    color: {%- if heading_alpha != 0 -%}{{ heading_color }}{%- else -%}{{ settings.heading_color }}{%- endif -%};
+    font-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    font-weight: {{ heading_font.weight }};
+    font-style: {{ heading_font.style }};
+  }
+
+  .rich-text__text {
+    font-size: {{ text_size }}px;
+    color: {%- if text_alpha != 0 -%}{{ text_color }}{%- else -%}{{ settings.regular_color }}{%- endif -%};
+    font-family: {{ text_font.family }}, {{ text_font.fallback_families }};
+    font-weight: {{ text_font.weight }};
+    font-style: {{ text_font.style }};
+  }
+{%- endcapture -%}
+
+{% style %}
+  {{ heading_font | font_face }}
+  {{ text_font | font_face }}
+
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding-left: {{ section.settings.padding_left }}px;
+    padding-right: {{ section.settings.padding_right }}px;
+    {% if section.settings.width == 'wide' %}
+      width: 100%;
+    {% elsif section.settings.width == 'half' %}
+      width: 50%;
+    {% endif %}
+  }
+  {% render 'css-loop',
+          css: section_css,
+          id: section.id
+  %}
+  {% render 'css-loop',
+          css: section.settings.custom_css,
+          id: section.id
+  %}
+{% endstyle %}
+
+{% comment %} HTML markup {% endcomment %}
+<section class="section
+                {{ section.settings.css_class }}
+                is-width-{{ section.settings.width }}
+                {% if background_alpha != 0 or gradient_alpha != 0  %}
+                  has-background
+                {% endif %}
+                "
+          {% if section.settings.animation != "none" %}
+            data-scroll-class="{{ section.settings.animation }}"
+          {% endif %}>
+  <div class="container
+              has-limit
+              ">
+    <div class="columns one-whole">
+      <div class="rich-text__content card-content">
+
+        {% if title != blank %}
+          <h2 class="rich-text__heading title text-align-{{ heading_alignment }} {% if heading_size > 50 %}mobile-shrink-text{% endif %}"><span>{{ title }}</span></h2>
+        {% endif %}
+
+        {% if text != blank %}
+          <div class="rich-text__text has-columns--{{ section.settings.columns }} text-align-{{ text_alignment }} content {% if text_size > 35 %}mobile-shrink-text{% endif %}">
+            {{ text }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.button_label != blank %}
+          <div class="buttons is-{{ section.settings.button_alignment }}">
+            {% render 'button',
+                    label: section.settings.button_label,
+                    href: section.settings.button_link,
+                    style: section.settings.button_style,
+                    type: "link"
+            %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

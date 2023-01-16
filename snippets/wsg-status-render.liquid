@@ -1,0 +1,43 @@
+{% comment %}
+Collection/Search Exclusion Loop:
+{%- if forloop.first == true -%}{%- capture isWsgCustomer -%}{%- render 'wsg-is-customer' -%}{%- endcapture -%}{%- assign isWsgCustomer = isWsgCustomer | strip -%}{%- if isWsgCustomer == "yes" -%}{%- assign wsgActiveCustomer = true -%}{%- else -%}{%- assign wsgActiveCustomer = false -%}{%- endif -%}{%- endif -%}
+{%- capture wsg-loop -%}{%- render 'wsg-status-render', wsgTempProd: product, wsgStatusAction: 'col-item', wsgActiveCustomer: wsgActiveCustomer -%}{%- endcapture -%}{%- if wsg-loop contains 'gentag' -%}{{ wsg-loop | remove: "gentag"  }}{%- endif -%}{%- if wsg-loop contains 'prodhide' -%}{%- continue -%}{%- endif -%}
+{% endcomment %}
+{% case wsgStatusAction %}
+  {% when 'col-item' %}	
+    {%- if wsgActiveCustomer == true -%} 
+      {%- assign escapedStr = shop.metafields.wsg_data.excludeTags | remove: '"' -%}
+      {%- assign exclusionArr = escapedStr | split: ", "-%}
+      {%- for tag in wsgTempProd.tags -%} 
+      	{%- for exclusionTag in exclusionArr -%}
+			{%- if exclusionTag == tag -%} 					  
+				{%- assign wsgExclude = true -%}                
+				{%- break -%}
+			{%- endif -%} 
+		{%- endfor -%}
+		{%- if wsgExclude == true -%} 
+			{% render 'wsg-status-render',  wsgTempProd: wsgTempProd, wsgStatusAction: 'hide-product', wsgActiveCustomer: wsgActiveCustomer %}
+			{%- break -%} 
+		{%- endif -%}
+	 {%- endfor -%}
+	 {%- unless wsgExclude == true -%}             
+     		{% render 'wsg-status-render', wsgTempProd: wsgTempProd, wsgStatusAction: 'render-tag', wsgActiveCustomer: wsgActiveCustomer %}
+		{%- endunless -%}    
+	{%- else -%}  		
+		{%- if wsgTempProd.tags contains 'wholesale-only' -%} 
+			{%- assign wsgExclude = true -%} 
+			{% assign wsgStatusAction = 'hide-product'%}
+			{% render 'wsg-status-render', wsgTempProd: wsgTempProd, wsgStatusAction: wsgStatusAction, wsgActiveCustomer: wsgActiveCustomer %}
+		{%- endif -%} 		
+    {%- endif -%} 
+  {% when 'hide-product' %}	 
+	{{'prodhide' | split: ''}}
+  {% when 'render-tag' %}
+<!-- wsgDataStart wsgCollections{%- for wsgCol in wsgTempProd.collections -%}
+{{- wsgCol.id -}}{%- if forloop.last == false -%},{%- endif -%}
+{%- endfor -%}wsgEndCollections
+prodData:{{- wsgTempProd | json -}}endProdData -->
+{{'gentag' | split: ''}}
+  {% else %}
+
+{% endcase %}
